@@ -10,22 +10,20 @@ from urllib.parse import urlparse, unquote
 from urllib.error import URLError
 from jinja2 import Environment, FileSystemLoader
 from vocabulary import Vocabulary
-
-# To-do:
-# - automated backups
-# - add widget (waiting for icloud bugfix)
-# - add application extension (waiting for icloud bugfix)
-
 try:
     from apikey import WORDNIK_API_KEY
 except ImportError:
     import sys
     sys.exit('You need a WordNik API key. See apikey-sample.py.')
+
 WORDNIK_API_URL = 'https://api.wordnik.com/v4'
 HTML_TEMPLATE_DIR = '.'
-DICTIONARY_FILE = 'vocabulary.json'
+VOCABULARY_FILE = 'vocabulary.json'
 
-# ---- The actions
+# ---- Functions & button actions
+# When convenient, button actions are set in the UI designer and defined here.
+# Some button actions are more useful when set and defined inside their view
+# classes.
 
 
 def load_word_view(word: str='', parent_view=None):
@@ -43,17 +41,6 @@ def action_random(sender):
     load_word_view(vocab.random_word())
 
 
-def action_share_word(sender):
-    word = sender.superview.superview.name
-    dialogs.share_text(word)
-
-
-def action_share_notes(sender):
-    word = sender.superview.superview.name
-    definition = sender.superview.superview['textview'].text
-    dialogs.share_text('%s\n\n%s' % (word, definition))
-
-
 def export_notes_format(word, notes):
     '''Note: I might update this with more sofisticated markup.'''
     return '%s\n\n%s' % (word, notes)
@@ -65,14 +52,14 @@ def action_share_multiple(sender):
     for row in table.selected_rows:
         cell = vocab.tableview_cell_for_row(table, row[0], row[1])
         word = cell.text_label.text
-        definition = vocab.get_definition(word)
+        definition = vocab.get_notes(word)
         words.append(export_notes_format(word, definition))
     dialogs.share_text('\n\n----\n\n'.join(words))
 
 
 def action_export(sender):
     vocab.save_json_file()
-    console.open_in(DICTIONARY_FILE)
+    console.open_in(VOCABULARY_FILE)
 
 
 def action_import(sender):
@@ -153,8 +140,8 @@ class WordView(ui.View):
         self.right_button_items = [share_button]
         
     def load_word(self, word: str):
-        self.name = word
-        self['textview'].text = vocab.get_definition(word)
+        self['word'].text = word
+        self['textview'].text = vocab.get_notes(word)
         if self['textview'].text:
             self['segmentedcontrol1'].selected_index = 0
         else:
@@ -184,7 +171,7 @@ class WordView(ui.View):
         html = template.render(word=word, definitions=definitions,
                                suggestions=suggestions, error=err)
         self['webcontainer']['wordnik_def'].load_html(html)
-        if definitions and not vocab.get_definition(word):
+        if definitions and not vocab.get_notes(word):
             vocab.set_word(word)
             main['table'].reload()
     
@@ -192,24 +179,23 @@ class WordView(ui.View):
         '''Note: I might update this with more softisticated markup.'''
         options = ['Share Word', 'Share Word & Notes']
         d = dialogs.list_dialog(items=options)
+        word = self['word'].text
         if d == options[0]:
-            text = self.name
+            text = word
         elif d == options[1]:
-            text = export_notes_format(self.name, self['textview'].text)
+            text = export_notes_format(word, self['textview'].text)
         else:  # no option was selected
             return
         dialogs.share_text(text)
     
     def button_open_in_safari(self, sender):
-        word = self.name
+        word = self['word'].text
         webbrowser.get('safari').open('https://wordnik.com/words/' + word)
     
     def button_switch_modes(self, sender):
         self.switch_modes()
     
     def switch_modes(self):
-        index = self['segmentedcontrol1'].selected_index
-        
         def switch_webview():
             self['textview'].end_editing()
             self['webcontainer'].alpha = 1.0
@@ -219,10 +205,9 @@ class WordView(ui.View):
             self['webcontainer'].alpha = 0.0
             self['textview'].alpha = 1.0
         
-        if index == 0:
-            ui.animate(switch_textview)
-        elif index == 1:
-            ui.animate(switch_webview)
+        animations = (switch_textview, switch_webview)
+        index = self['segmentedcontrol1'].selected_index
+        ui.animate(animations[index])
 
 
 class AboutView(ui.View):
@@ -280,7 +265,7 @@ class AboutWebDelegate:
 class TextViewDelegate:
     def textview_did_end_editing(self, textview):
         '''Saves the text'''
-        word = textview.superview.name
+        word = textview.superview['word'].text
         definition = textview.text
         vocab.set_word(word, definition)
         main['table'].reload()
@@ -335,14 +320,14 @@ class SearchDelegate:
 
 class ContainerView(ui.View):
     '''This view contains the navigation view so we can save our data. When a
-    ui.NavigationView closes, `will_close` doesn't get called on any of the 
+    ui.NavigationView closes, `will_close` doesn't get called on any of the
     views inside it.
     '''
     def will_close(self):
         vocab.save_json_file()
 
 if __name__ == '__main__':
-    vocab = Vocabulary(data_file=DICTIONARY_FILE)
+    vocab = Vocabulary(data_file=VOCABULARY_FILE)
     wn_api = WordApi(swagger.ApiClient(WORDNIK_API_KEY,
                                        WORDNIK_API_URL))
     jinja2env = Environment(loader=FileSystemLoader(HTML_TEMPLATE_DIR))

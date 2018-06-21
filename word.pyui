@@ -5,7 +5,7 @@
         "nodes" : [
 
         ],
-        "frame" : "{{6, 6}, {308, 24}}",
+        "frame" : "{{6, 46}, {308, 24}}",
         "class" : "SegmentedControl",
         "attributes" : {
           "action" : "",
@@ -24,15 +24,15 @@
             "nodes" : [
 
             ],
-            "frame" : "{{6, 0}, {308, 490}}",
+            "frame" : "{{6, 0}, {308, 450}}",
             "class" : "WebView",
             "attributes" : {
-              "flex" : "WH",
+              "scales_to_fit" : false,
               "frame" : "{{60, 119}, {200, 200}}",
-              "uuid" : "44BF3BF4-D284-4002-A17A-4F467312E73F",
+              "flex" : "WH",
               "class" : "WebView",
               "name" : "wordnik_def",
-              "scales_to_fit" : false
+              "uuid" : "44BF3BF4-D284-4002-A17A-4F467312E73F"
             },
             "selected" : false
           },
@@ -40,7 +40,7 @@
             "nodes" : [
 
             ],
-            "frame" : "{{6, 498}, {308, 32}}",
+            "frame" : "{{6, 458}, {308, 32}}",
             "class" : "Button",
             "attributes" : {
               "action" : "",
@@ -55,7 +55,7 @@
             "selected" : true
           }
         ],
-        "frame" : "{{0, 38}, {320, 530}}",
+        "frame" : "{{0, 78}, {320, 490}}",
         "class" : "View",
         "attributes" : {
           "flex" : "WH",
@@ -70,7 +70,7 @@
         "nodes" : [
 
         ],
-        "frame" : "{{6, 38}, {308, 524}}",
+        "frame" : "{{6, 78}, {308, 484}}",
         "class" : "TextView",
         "attributes" : {
           "uuid" : "71507439-4074-41F4-996C-063BA99A5167",
@@ -90,6 +90,25 @@
           "flex" : "WH"
         },
         "selected" : false
+      },
+      {
+        "nodes" : [
+
+        ],
+        "frame" : "{{6, 6}, {308, 32}}",
+        "class" : "Label",
+        "attributes" : {
+          "flex" : "W",
+          "name" : "word",
+          "frame" : "{{85, 268}, {150, 32}}",
+          "uuid" : "B929A912-EA55-4D31-9FC8-E0F7FD9BBE56",
+          "class" : "Label",
+          "alignment" : "left",
+          "text" : "Word",
+          "font_size" : 24,
+          "font_name" : "<System-Bold>"
+        },
+        "selected" : false
       }
     ],
     "frame" : "{{0, 0}, {320, 568}}",
@@ -101,7 +120,7 @@
       "tint_color" : "RGBA(0.000000,0.478000,1.000000,1.000000)",
       "border_color" : "RGBA(0.000000,0.000000,0.000000,1.000000)",
       "background_color" : "RGBA(1.000000,1.000000,1.000000,1.000000)",
-      "name" : "word"
+      "name" : ""
     },
     "selected" : false
   }

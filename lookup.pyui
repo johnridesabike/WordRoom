@@ -28,8 +28,8 @@
         "class" : "TableView",
         "attributes" : {
           "uuid" : "F5AA4891-AF66-457E-9AF3-F41AC1896E3A",
-          "editing" : false,
           "flex" : "WH",
+          "data_source_action" : "",
           "background_color" : "RGBA(1.0, 1.0, 1.0, 1.0)",
           "frame" : "{{60, 140}, {200, 200}}",
           "data_source_items" : "",
@@ -40,7 +40,7 @@
           "row_height" : 44,
           "class" : "TableView",
           "name" : "table",
-          "data_source_action" : ""
+          "editing" : false
         },
         "selected" : false
       },
