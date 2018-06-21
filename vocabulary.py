@@ -34,24 +34,24 @@ class Vocabulary:
         with open(self.data_file, 'w') as outfile:
             json.dump(self._words, outfile)
 
-    def set_word(self, word: str, definition=''):
+    def set_word(self, word: str, notes=''):
         '''Adds a word or updates the word if it already exists.
         Words with notes are saved to the notes dictionary, and words without
         notes are saved to the history dictionary. A word can't be in both.
         '''
         word = word.strip()
-        if word and definition:  # adds to notes
-            self._words[0][word] = definition
+        if word and notes:  # adds to notes
+            self._words[0][word] = notes
             if word in self._words[1]:  # deletes duplicates
                 del self._words[1][word]
         elif word:  # adds to history
-            self._words[1][word] = definition
+            self._words[1][word] = notes
             if word in self._words[0]:  # deletes duplicates
                 del self._words[0][word]
 
-    def get_definition(self, word: str, ):
-        '''looks up a word and returns its definition. Words without
-        definitions return empty strings. This can be used to check if a word
+    def get_notes(self, word: str, ):
+        '''looks up a word and returns its notes. Words without
+        notess return empty strings. This can be used to check if a word
         is in the dictionary or not. 
         '''
         word = word.strip()
