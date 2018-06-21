@@ -1,3 +1,8 @@
+.DS_Store
+apikey.py
+vocabulary.json
+wordnik/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
