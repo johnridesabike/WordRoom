@@ -1,0 +1,87 @@
+[
+  {
+    "nodes" : [
+      {
+        "nodes" : [
+
+        ],
+        "frame" : "{{6, 530}, {151, 32}}",
+        "class" : "Button",
+        "attributes" : {
+          "action" : "action_export",
+          "flex" : "WT",
+          "image_name" : "iob:ios7_upload_outline_32",
+          "frame" : "{{120, 224}, {80, 32}}",
+          "title" : "Export \/ Backup",
+          "uuid" : "6D5E98D2-E20A-46FC-B7F7-9A2FA0AF79D1",
+          "class" : "Button",
+          "font_size" : 15,
+          "name" : "button1"
+        },
+        "selected" : false
+      },
+      {
+        "nodes" : [
+
+        ],
+        "frame" : "{{163, 530}, {151, 32}}",
+        "class" : "Button",
+        "attributes" : {
+          "action" : "action_import",
+          "flex" : "WT",
+          "image_name" : "iob:ios7_download_outline_32",
+          "frame" : "{{120, 224}, {80, 32}}",
+          "title" : "Import \/ Restore",
+          "uuid" : "9FC2E935-1714-4D41-999D-D603D3346A42",
+          "class" : "Button",
+          "font_size" : 15,
+          "name" : "button2"
+        },
+        "selected" : false
+      },
+      {
+        "nodes" : [
+
+        ],
+        "frame" : "{{6, 6}, {308, 482}}",
+        "class" : "WebView",
+        "attributes" : {
+          "uuid" : "344943C4-593C-4F71-B6AE-695D89A051CD",
+          "frame" : "{{60, 140}, {200, 200}}",
+          "scales_to_fit" : false,
+          "class" : "WebView",
+          "name" : "webview1",
+          "flex" : "WH"
+        },
+        "selected" : false
+      },
+      {
+        "nodes" : [
+
+        ],
+        "frame" : "{{51, 496}, {217, 26}}",
+        "class" : "ImageView",
+        "attributes" : {
+          "flex" : "LRT",
+          "frame" : "{{110, 190}, {100, 100}}",
+          "class" : "ImageView",
+          "name" : "imageview1",
+          "uuid" : "0EEDF975-6030-4DA9-8C6E-C910FE388554"
+        },
+        "selected" : false
+      }
+    ],
+    "frame" : "{{0, 0}, {320, 568}}",
+    "class" : "View",
+    "attributes" : {
+      "flex" : "",
+      "custom_class" : "AboutView",
+      "enabled" : true,
+      "tint_color" : "RGBA(0.000000,0.478000,1.000000,1.000000)",
+      "border_color" : "RGBA(0.000000,0.000000,0.000000,1.000000)",
+      "background_color" : "RGBA(1.000000,1.000000,1.000000,1.000000)",
+      "name" : "About"
+    },
+    "selected" : false
+  }
+]

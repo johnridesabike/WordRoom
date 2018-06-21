@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en-us">
+<head>
+    <title>{{word}}</title>
+    <style>
+    body {
+        font-family: -apple-system, "HelveticaNeue";
+        word-wrap: break-word;
+        -webkit-text-size-adjust: 100%;
+    }
+    .partOfSpeech, cite {
+        font-style: italic;
+        color: grey;
+        font-size: small;
+    }
+    .attribution {
+        border-bottom: 1px lightgrey solid;
+    }
+    .suggestionHead {
+        font-style: italic;
+    }
+    </style>
+</head>
+<body>
+{% if error %}
+    <p class="error">
+        Network error.
+    </p>
+{% endif %}
+{% if not definitions %}
+    <p>
+        No definitions found.
+    </p>
+{% endif %}
+{% for d in definitions %}
+    {% if loop.first %}
+    <p class="attribution">
+        <cite>{{d.attributionText}}</cite>
+    </p>
+    {% endif %}
+    <p class="definition">
+        <span class="partOfSpeech">{{d.partOfSpeech}}</span>
+        {{d.text}}
+    </p>
+{% endfor %}
+{% if suggestions %}
+    <p class="suggestionHead">
+        Consider these suggestions:
+    </p>
+    {% for suggestion in suggestions %}
+    <p>
+        <a href="#{{suggestion}}">{{suggestion}}</a>
+    </p>
+    {% endfor %}
+{% endif %}
+    <footer>
+    </footer>
+</body>

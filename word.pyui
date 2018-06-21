@@ -1,0 +1,108 @@
+[
+  {
+    "nodes" : [
+      {
+        "nodes" : [
+
+        ],
+        "frame" : "{{6, 6}, {308, 24}}",
+        "class" : "SegmentedControl",
+        "attributes" : {
+          "action" : "",
+          "flex" : "LR",
+          "segments" : "My Notes|Definition",
+          "frame" : "{{100, 226}, {120, 29}}",
+          "uuid" : "440C949D-BF29-42BB-BB23-68DC208D54B2",
+          "class" : "SegmentedControl",
+          "name" : "segmentedcontrol1"
+        },
+        "selected" : false
+      },
+      {
+        "nodes" : [
+          {
+            "nodes" : [
+
+            ],
+            "frame" : "{{6, 0}, {308, 490}}",
+            "class" : "WebView",
+            "attributes" : {
+              "flex" : "WH",
+              "frame" : "{{60, 119}, {200, 200}}",
+              "uuid" : "44BF3BF4-D284-4002-A17A-4F467312E73F",
+              "class" : "WebView",
+              "name" : "wordnik_def",
+              "scales_to_fit" : false
+            },
+            "selected" : false
+          },
+          {
+            "nodes" : [
+
+            ],
+            "frame" : "{{6, 498}, {308, 32}}",
+            "class" : "Button",
+            "attributes" : {
+              "action" : "",
+              "flex" : "WLRT",
+              "frame" : "{{120, 203}, {80, 32}}",
+              "title" : "Open on WordNik.com",
+              "uuid" : "1854CCA4-5B88-41FF-A0AF-994A99E41418",
+              "class" : "Button",
+              "name" : "open_safari",
+              "font_size" : 15
+            },
+            "selected" : true
+          }
+        ],
+        "frame" : "{{0, 38}, {320, 530}}",
+        "class" : "View",
+        "attributes" : {
+          "flex" : "WH",
+          "frame" : "{{110, 190}, {100, 100}}",
+          "class" : "View",
+          "name" : "webcontainer",
+          "uuid" : "F871C612-44A3-4D8F-9FF0-ED0118103E8E"
+        },
+        "selected" : false
+      },
+      {
+        "nodes" : [
+
+        ],
+        "frame" : "{{6, 38}, {308, 524}}",
+        "class" : "TextView",
+        "attributes" : {
+          "uuid" : "71507439-4074-41F4-996C-063BA99A5167",
+          "font_size" : 17,
+          "corner_radius" : 4,
+          "background_color" : "RGBA(1.000000,1.000000,1.000000,1.000000)",
+          "frame" : "{{60, 140}, {200, 200}}",
+          "border_color" : "RGBA(0.903302,0.903302,0.903302,1.000000)",
+          "editable" : true,
+          "border_width" : 1,
+          "alignment" : "left",
+          "autocorrection_type" : "default",
+          "font_name" : "<System>",
+          "spellchecking_type" : "default",
+          "class" : "TextView",
+          "name" : "textview",
+          "flex" : "WH"
+        },
+        "selected" : false
+      }
+    ],
+    "frame" : "{{0, 0}, {320, 568}}",
+    "class" : "View",
+    "attributes" : {
+      "flex" : "",
+      "custom_class" : "WordView",
+      "enabled" : true,
+      "tint_color" : "RGBA(0.000000,0.478000,1.000000,1.000000)",
+      "border_color" : "RGBA(0.000000,0.000000,0.000000,1.000000)",
+      "background_color" : "RGBA(1.000000,1.000000,1.000000,1.000000)",
+      "name" : "word"
+    },
+    "selected" : false
+  }
+]

@@ -1,0 +1,177 @@
+[
+  {
+    "nodes" : [
+      {
+        "nodes" : [
+
+        ],
+        "frame" : "{{322, 6}, {56, 32}}",
+        "class" : "Button",
+        "attributes" : {
+          "action" : "action_cancel",
+          "flex" : "LB",
+          "frame" : "{{120, 224}, {80, 32}}",
+          "title" : "Cancel",
+          "uuid" : "A075EE1A-DCEE-480B-9A86-1A568EEE8DDD",
+          "class" : "Button",
+          "custom_attributes" : "{'enabled' : False}",
+          "name" : "cancel",
+          "font_size" : 18
+        },
+        "selected" : false
+      },
+      {
+        "nodes" : [
+
+        ],
+        "frame" : "{{6, 78}, {308, 444}}",
+        "class" : "TableView",
+        "attributes" : {
+          "uuid" : "F5AA4891-AF66-457E-9AF3-F41AC1896E3A",
+          "editing" : false,
+          "flex" : "WH",
+          "background_color" : "RGBA(1.0, 1.0, 1.0, 1.0)",
+          "frame" : "{{60, 140}, {200, 200}}",
+          "data_source_items" : "",
+          "data_source_number_of_lines" : 1,
+          "custom_attributes" : "{'allows_multiple_selection_during_editing': True}",
+          "data_source_delete_enabled" : false,
+          "data_source_font_size" : 18,
+          "row_height" : 44,
+          "class" : "TableView",
+          "name" : "table",
+          "data_source_action" : ""
+        },
+        "selected" : false
+      },
+      {
+        "nodes" : [
+          {
+            "nodes" : [
+
+            ],
+            "frame" : "{{138, 0}, {32, 32}}",
+            "class" : "Button",
+            "attributes" : {
+              "action" : "action_random",
+              "flex" : "WLRT",
+              "font_size" : 15,
+              "frame" : "{{122, 15}, {80, 32}}",
+              "title" : "",
+              "uuid" : "38864F81-698F-4C2E-9D75-102D3DCC78E4",
+              "class" : "Button",
+              "name" : "button3",
+              "image_name" : "iob:shuffle_32"
+            },
+            "selected" : false
+          },
+          {
+            "nodes" : [
+
+            ],
+            "frame" : "{{7, 0}, {32, 32}}",
+            "class" : "Button",
+            "attributes" : {
+              "flex" : "RT",
+              "image_name" : "iob:ios7_trash_outline_32",
+              "frame" : "{{120, -4}, {80, 32}}",
+              "tint_color" : "RGBA(1.000000,0.000000,0.000000,1.000000)",
+              "title" : "",
+              "uuid" : "6F086BC6-EB96-4229-BD11-F3130457CF24",
+              "class" : "Button",
+              "custom_attributes" : "{'enabled' : False}",
+              "name" : "delete",
+              "font_size" : 18
+            },
+            "selected" : false
+          },
+          {
+            "nodes" : [
+
+            ],
+            "frame" : "{{270, 0}, {32, 32}}",
+            "class" : "Button",
+            "attributes" : {
+              "flex" : "LT",
+              "action" : "action_share_multiple",
+              "name" : "share",
+              "frame" : "{{120, 0}, {80, 32}}",
+              "title" : "",
+              "uuid" : "38E0D757-19BA-482B-9610-894C16258825",
+              "class" : "Button",
+              "custom_attributes" : "{'enabled' : False}",
+              "font_size" : 15,
+              "image_name" : "iob:ios7_upload_outline_32"
+            },
+            "selected" : false
+          }
+        ],
+        "frame" : "{{6, 530}, {308, 32}}",
+        "class" : "View",
+        "attributes" : {
+          "flex" : "WT",
+          "border_width" : 0,
+          "alpha" : 1,
+          "frame" : "{{110, 190}, {100, 100}}",
+          "class" : "View",
+          "corner_radius" : 0,
+          "uuid" : "2D826A6A-BB75-45C4-917F-95D18896F160",
+          "name" : "toolbar"
+        },
+        "selected" : false
+      },
+      {
+        "nodes" : [
+
+        ],
+        "frame" : "{{6, 6}, {308, 32}}",
+        "class" : "TextField",
+        "attributes" : {
+          "uuid" : "A19C1DE7-FF48-4092-A269-2FEBB9C221DC",
+          "flex" : "W",
+          "frame" : "{{60, 224}, {200, 32}}",
+          "custom_attributes" : "{'clear_button_mode': 'while_editing', 'autocapitalization_type': ui.AUTOCAPITALIZE_NONE}",
+          "alignment" : "left",
+          "autocorrection_type" : "default",
+          "action" : "",
+          "placeholder" : "Look up word",
+          "font_name" : "<System>",
+          "spellchecking_type" : "default",
+          "class" : "TextField",
+          "name" : "search_field",
+          "font_size" : 17
+        },
+        "selected" : false
+      },
+      {
+        "nodes" : [
+
+        ],
+        "frame" : "{{6, 46}, {308, 24}}",
+        "class" : "SegmentedControl",
+        "attributes" : {
+          "action" : "action_switch_search",
+          "flex" : "LR",
+          "segments" : "Search Words|Search Words & Notes",
+          "frame" : "{{100, 270}, {120, 29}}",
+          "uuid" : "1ADD12B9-E9C6-4076-B0BB-CF7323F41CDC",
+          "class" : "SegmentedControl",
+          "name" : "segmentedcontrol1"
+        },
+        "selected" : false
+      }
+    ],
+    "frame" : "{{0, 0}, {320, 568}}",
+    "class" : "View",
+    "attributes" : {
+      "flex" : "",
+      "custom_class" : "LookupView",
+      "enabled" : true,
+      "tint_color" : "RGBA(0.000000,0.478000,1.000000,1.000000)",
+      "border_color" : "RGBA(0.000000,0.000000,0.000000,1.000000)",
+      "background_color" : "RGBA(1.000000,1.000000,1.000000,1.000000)",
+      "name" : "WordRoom"
+    },
+    "selected" : false
+  }
+]
