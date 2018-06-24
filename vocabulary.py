@@ -4,6 +4,7 @@ import console
 import json
 import random
 
+
 class Vocabulary:
     '''This is the core class that processes all of the word data. It includes
     methods for setting, retrieving, and searching words and notes. It also
@@ -52,7 +53,7 @@ class Vocabulary:
     def get_notes(self, word: str, ):
         '''looks up a word and returns its notes. Words without
         notess return empty strings. This can be used to check if a word
-        is in the dictionary or not. 
+        is in the dictionary or not.
         '''
         word = word.strip()
         if word in self._words[0]:
@@ -69,7 +70,7 @@ class Vocabulary:
     
     def fulltext_toggle(self, onoff=True):
         '''When set to `False`, queries only search words. When set to `True`,
-        queries also search the full note text. 
+        queries also search the full note text.
         '''
         self._ftq = onoff
     
@@ -108,7 +109,7 @@ class Vocabulary:
     # suggestions. I might add actual suggestions from the WordNik API sometime
      
     def tableview_number_of_sections(self, tableview):
-        '''When there's a query, this returns an extra section for search 
+        '''When there's a query, this returns an extra section for search
         Suggestions.
         '''
         if self._query:
@@ -117,7 +118,7 @@ class Vocabulary:
             return 2
         
     def tableview_title_for_header(self, tableview, section):
-        '''When there's a query, this returns an extra section for search 
+        '''When there's a query, this returns an extra section for search
         Suggestions.
         '''
         headers = ['Words with notes', 'Words from history']
@@ -126,13 +127,13 @@ class Vocabulary:
         return headers[section]
         
     def tableview_number_of_rows(self, tableview, section):
-        '''When there's a query, this returns an extra row for search 
-        Suggestions. 
+        '''When there's a query, this returns an extra row for search
+        Suggestions.
         '''
         if self._query and section == 0:
             return 1
         elif self._query:
-            # The extra section doesn't exist in the data, so we delete it 
+            # The extra section doesn't exist in the data, so we delete it
             # before calling other methods
             section -= 1
         return self.count_words(section)
@@ -148,7 +149,7 @@ class Vocabulary:
             cell.accessory_type = 'disclosure_indicator'
             return cell
         elif self._query:
-            # The extra section doesn't exist in the data, so we delete it 
+            # The extra section doesn't exist in the data, so we delete it
             # before calling other methods
             section -= 1
         cell = ui.TableViewCell()
@@ -170,14 +171,14 @@ class Vocabulary:
     def tableview_delete(self, tableview, section, row):
         s = section
         if self._query:
-            # The extra section doesn't exist in the data, so we delete it 
+            # The extra section doesn't exist in the data, so we delete it
             # before calling other methods
             s -= 1
         self.delete_word(s, self.list_words(section=s)[row])
         tableview.delete_rows([(row, section)])
     
     def tableview_delete_multiple(self, tableview):
-        '''This isn't a regular tableview method. It's only called by the 
+        '''This isn't a regular tableview method. It's only called by the
         action_delete function. I might rewrite this because it's kind of ugly.
         '''
         rows = tableview.selected_rows

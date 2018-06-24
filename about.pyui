@@ -15,8 +15,8 @@
           "title" : "Export \/ Backup",
           "uuid" : "6D5E98D2-E20A-46FC-B7F7-9A2FA0AF79D1",
           "class" : "Button",
-          "font_size" : 15,
-          "name" : "button1"
+          "name" : "button1",
+          "font_size" : 15
         },
         "selected" : false
       },
@@ -34,8 +34,8 @@
           "title" : "Import \/ Restore",
           "uuid" : "9FC2E935-1714-4D41-999D-D603D3346A42",
           "class" : "Button",
-          "font_size" : 15,
-          "name" : "button2"
+          "name" : "button2",
+          "font_size" : 15
         },
         "selected" : false
       },
@@ -43,15 +43,15 @@
         "nodes" : [
 
         ],
-        "frame" : "{{6, 6}, {308, 482}}",
+        "frame" : "{{6, 6}, {308, 437}}",
         "class" : "WebView",
         "attributes" : {
-          "uuid" : "344943C4-593C-4F71-B6AE-695D89A051CD",
-          "frame" : "{{60, 140}, {200, 200}}",
           "scales_to_fit" : false,
+          "frame" : "{{60, 140}, {200, 200}}",
+          "flex" : "WH",
           "class" : "WebView",
           "name" : "webview1",
-          "flex" : "WH"
+          "uuid" : "344943C4-593C-4F71-B6AE-695D89A051CD"
         },
         "selected" : false
       },
@@ -59,7 +59,7 @@
         "nodes" : [
 
         ],
-        "frame" : "{{51, 496}, {217, 26}}",
+        "frame" : "{{51.5, 456}, {217, 26}}",
         "class" : "ImageView",
         "attributes" : {
           "flex" : "LRT",
@@ -67,6 +67,25 @@
           "class" : "ImageView",
           "name" : "imageview1",
           "uuid" : "0EEDF975-6030-4DA9-8C6E-C910FE388554"
+        },
+        "selected" : false
+      },
+      {
+        "nodes" : [
+
+        ],
+        "frame" : "{{6, 490}, {308, 32}}",
+        "class" : "Button",
+        "attributes" : {
+          "flex" : "LRT",
+          "action" : "action_change_key",
+          "font_size" : 15,
+          "frame" : "{{120, 268}, {80, 32}}",
+          "title" : "Change WordNik API Key",
+          "uuid" : "CE1EFED5-CD80-49E2-9786-81C38DC400E2",
+          "class" : "Button",
+          "name" : "button3",
+          "image_name" : "iob:key_24"
         },
         "selected" : false
       }
