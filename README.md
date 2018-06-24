@@ -34,3 +34,9 @@ To keep the code light, I haven't written any features like tags, categories, or
 If you think this app is useful and you want to make it better, feel free to open an issue or a pull request. I'm open to suggestions for new features.
 
 There is probably a lot of code that could be improved. I made most decisions based on what was easy for me to do at the time. If you have any questions about the code, [please get in touch](https://johnridesa.bike/contact/).
+
+## License
+
+Copyright 2018 John Jackson
+
+Licensed under the MIT License. See the included LICENSE file for details.

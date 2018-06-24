@@ -12,8 +12,6 @@ from vocabulary import Vocabulary
 import define
 from config import *
 
-# fix icloud sync issue
-
 # ---- Functions & button actions
 # When convenient, button actions are set in the UI designer and defined here.
 # Some button actions are more useful when set and defined inside their view
@@ -209,7 +207,11 @@ class AboutView(ui.View):
         html = jinja2env.get_template('about.html')
         self['webview1'].load_html(html.render())
         self['webview1'].delegate = WebDelegate()
-        self['imageview1'].image = ui.Image.named('wordnik_badge_a1.png')
+        img = ui.Image.named('wordnik_badge_a1.png')
+        a = lambda x: webbrowser.get('safari').open('https://wordnik.com/')
+        self['wn_logo'].background_image = img
+        self['wn_logo'].action = a
+        self['wn_logo'].title = ''
 
 # ---- View Delegates
 

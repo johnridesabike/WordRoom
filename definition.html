@@ -43,6 +43,9 @@
 {% else %}
 <p class="attribution">
     <cite>{{attribution}}</cite>
+{% if attributionUrl %}
+    <a href="{{attributionUrl}}">(?)</a>
+{% endif %}
 </p>
 {% endif %}
 {% for d in definitions %}

@@ -15,8 +15,8 @@
           "title" : "Export \/ Backup",
           "uuid" : "6D5E98D2-E20A-46FC-B7F7-9A2FA0AF79D1",
           "class" : "Button",
-          "name" : "button1",
-          "font_size" : 15
+          "font_size" : 15,
+          "name" : "button1"
         },
         "selected" : false
       },
@@ -34,8 +34,8 @@
           "title" : "Import \/ Restore",
           "uuid" : "9FC2E935-1714-4D41-999D-D603D3346A42",
           "class" : "Button",
-          "name" : "button2",
-          "font_size" : 15
+          "font_size" : 15,
+          "name" : "button2"
         },
         "selected" : false
       },
@@ -43,30 +43,15 @@
         "nodes" : [
 
         ],
-        "frame" : "{{6, 6}, {308, 437}}",
+        "frame" : "{{6, 6}, {308, 442}}",
         "class" : "WebView",
         "attributes" : {
-          "scales_to_fit" : false,
+          "uuid" : "344943C4-593C-4F71-B6AE-695D89A051CD",
           "frame" : "{{60, 140}, {200, 200}}",
-          "flex" : "WH",
+          "scales_to_fit" : false,
           "class" : "WebView",
           "name" : "webview1",
-          "uuid" : "344943C4-593C-4F71-B6AE-695D89A051CD"
-        },
-        "selected" : false
-      },
-      {
-        "nodes" : [
-
-        ],
-        "frame" : "{{51.5, 456}, {217, 26}}",
-        "class" : "ImageView",
-        "attributes" : {
-          "flex" : "LRT",
-          "frame" : "{{110, 190}, {100, 100}}",
-          "class" : "ImageView",
-          "name" : "imageview1",
-          "uuid" : "0EEDF975-6030-4DA9-8C6E-C910FE388554"
+          "flex" : "WH"
         },
         "selected" : false
       },
@@ -79,13 +64,30 @@
         "attributes" : {
           "flex" : "LRT",
           "action" : "action_change_key",
-          "font_size" : 15,
+          "name" : "button3",
           "frame" : "{{120, 268}, {80, 32}}",
           "title" : "Change WordNik API Key",
           "uuid" : "CE1EFED5-CD80-49E2-9786-81C38DC400E2",
           "class" : "Button",
-          "name" : "button3",
+          "font_size" : 15,
           "image_name" : "iob:key_24"
+        },
+        "selected" : false
+      },
+      {
+        "nodes" : [
+
+        ],
+        "frame" : "{{51.5, 456}, {216, 26}}",
+        "class" : "Button",
+        "attributes" : {
+          "flex" : "LRT",
+          "frame" : "{{120, 268}, {80, 32}}",
+          "title" : "Powered by Wordnik",
+          "uuid" : "28574097-06F2-45FC-90DF-3A045D99A707",
+          "class" : "Button",
+          "name" : "wn_logo",
+          "font_size" : 15
         },
         "selected" : false
       }
