@@ -7,7 +7,7 @@ A while ago, I wanted an app that would let me write my own personal dictionary.
 
 You can think of this as a cross between a dictionary app and a notes app. Every time you look up a word, you are given a textbox where you can write whatever you want about it. All of your words with notes are stored so you can access them later. If you open a word again, then your notes will be the first thing you see. The dictionary definition is secondary.
 
-### Why?
+## Why?
 
 Personally, I started jotting down interesting words a while ago, but I wanted to remember more than just their definitions. I started taking notes on where I had heard the word, any interesting contexts, the time period when it was written, and so on. 
 
@@ -20,22 +20,23 @@ There are many excellent dictionary apps available today, and it's not my intent
 ## Installation
 
 1. Download [Pythonista](http://omz-software.com/pythonista/) for iOS. 
-2. Clone this repository to Pythonista. If you have a Mac or PC nearby, the easiest way of doing this is cloning a copy on those and copying it to the Pythonista iCloud folder. You can also use tools like [this script](https://github.com/cclauss/Ten-lines-or-less/blob/master/read_zipfile_from_github.py) without needing to leave your iOS device.
-3. Obtain a [WordNik API Key](https://developer.wordnik.com). It's free for personal use. Once you have one, you'll need to follow the instructions in `apikey-sample.py` to plug it into the code.
-4. Download [Python 3 client for Wordnik.com API](https://github.com/wordnik/wordnik-python3).
-5. Run `main.py` in the WordRoom folder.
+2. Download the latest release of WordRoom to Pythonista. If you have a Mac or PC nearby, the easiest way of doing this is cloning a copy on those and copying it to the Pythonista iCloud folder. You can also use tools like [this script](https://github.com/cclauss/Ten-lines-or-less/blob/master/read_zipfile_from_github.py) without needing to leave your iOS device.
+3. Run `WordRoom.py` in the WordRoom directory.
 
-### Tips
+## Tips
+
+WordRoom includes a basic offline dictionary [from this repository](https://github.com/johnridesabike/OPTED-to-JSON). To get access to the complete online definitions, you'll need [WordNik API Key](https://developer.wordnik.com), which is free for personal use. Once you have one, follow the instructions in WordRoom.
 
 To keep the code light, I haven't written any features like tags, categories, or favorites. If you want a better way of organizing your words, you can take advantage of the search feature. It will recognize #HashTags in your notes.
 
-## Possible future features
+## Contributing
 
-- Application extension and widget (There's currently a Pythonista iCloud bug affecting this.)
-- Performance optimizations
-- User-editable categories
-- Flash-card mode
-- Dictionary sources different than WordNik
-- Standalone application
-- Cross-platform application
+If you think this app is useful and you want to make it better, feel free to open an issue or a pull request. I'm open to suggestions for new features.
 
+There is probably a lot of code that could be improved. I made most decisions based on what was easy for me to do at the time. If you have any questions about the code, [please get in touch](https://johnridesa.bike/contact/).
+
+## License
+
+Copyright 2018 John Jackson
+
+Licensed under the MIT License. See the included LICENSE file for details.

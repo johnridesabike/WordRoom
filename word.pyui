@@ -24,15 +24,15 @@
             "nodes" : [
 
             ],
-            "frame" : "{{6, 0}, {308, 450}}",
+            "frame" : "{{6, 6}, {308, 433}}",
             "class" : "WebView",
             "attributes" : {
-              "scales_to_fit" : false,
-              "frame" : "{{60, 119}, {200, 200}}",
               "flex" : "WH",
+              "frame" : "{{60, 119}, {200, 200}}",
+              "uuid" : "44BF3BF4-D284-4002-A17A-4F467312E73F",
               "class" : "WebView",
               "name" : "wordnik_def",
-              "uuid" : "44BF3BF4-D284-4002-A17A-4F467312E73F"
+              "scales_to_fit" : false
             },
             "selected" : false
           },
@@ -40,7 +40,7 @@
             "nodes" : [
 
             ],
-            "frame" : "{{6, 458}, {308, 32}}",
+            "frame" : "{{6, 452}, {308, 32}}",
             "class" : "Button",
             "attributes" : {
               "action" : "",
@@ -50,9 +50,9 @@
               "uuid" : "1854CCA4-5B88-41FF-A0AF-994A99E41418",
               "class" : "Button",
               "name" : "open_safari",
-              "font_size" : 15
+              "font_size" : 18
             },
-            "selected" : true
+            "selected" : false
           }
         ],
         "frame" : "{{0, 78}, {320, 490}}",
@@ -64,7 +64,7 @@
           "name" : "webcontainer",
           "uuid" : "F871C612-44A3-4D8F-9FF0-ED0118103E8E"
         },
-        "selected" : false
+        "selected" : true
       },
       {
         "nodes" : [
@@ -99,13 +99,13 @@
         "class" : "Label",
         "attributes" : {
           "flex" : "W",
-          "name" : "word",
+          "font_size" : 24,
           "frame" : "{{85, 268}, {150, 32}}",
           "uuid" : "B929A912-EA55-4D31-9FC8-E0F7FD9BBE56",
           "class" : "Label",
           "alignment" : "left",
           "text" : "Word",
-          "font_size" : 24,
+          "name" : "word",
           "font_name" : "<System-Bold>"
         },
         "selected" : false

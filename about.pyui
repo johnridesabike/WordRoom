@@ -43,7 +43,7 @@
         "nodes" : [
 
         ],
-        "frame" : "{{6, 6}, {308, 482}}",
+        "frame" : "{{6, 6}, {308, 442}}",
         "class" : "WebView",
         "attributes" : {
           "uuid" : "344943C4-593C-4F71-B6AE-695D89A051CD",
@@ -59,14 +59,35 @@
         "nodes" : [
 
         ],
-        "frame" : "{{51, 496}, {217, 26}}",
-        "class" : "ImageView",
+        "frame" : "{{6, 490}, {308, 32}}",
+        "class" : "Button",
         "attributes" : {
           "flex" : "LRT",
-          "frame" : "{{110, 190}, {100, 100}}",
-          "class" : "ImageView",
-          "name" : "imageview1",
-          "uuid" : "0EEDF975-6030-4DA9-8C6E-C910FE388554"
+          "action" : "action_change_key",
+          "name" : "button3",
+          "frame" : "{{120, 268}, {80, 32}}",
+          "title" : "Change WordNik API Key",
+          "uuid" : "CE1EFED5-CD80-49E2-9786-81C38DC400E2",
+          "class" : "Button",
+          "font_size" : 15,
+          "image_name" : "iob:key_24"
+        },
+        "selected" : false
+      },
+      {
+        "nodes" : [
+
+        ],
+        "frame" : "{{51.5, 456}, {216, 26}}",
+        "class" : "Button",
+        "attributes" : {
+          "flex" : "LRT",
+          "frame" : "{{120, 268}, {80, 32}}",
+          "title" : "Powered by Wordnik",
+          "uuid" : "28574097-06F2-45FC-90DF-3A045D99A707",
+          "class" : "Button",
+          "name" : "wn_logo",
+          "font_size" : 15
         },
         "selected" : false
       }

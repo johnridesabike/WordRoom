@@ -1,24 +1,16 @@
 #!/usr/bin/env python3
+# coding: utf-8
 import ui
 import dialogs
 import console
 # import appex
 import webbrowser
-from wordnik import swagger
-from wordnik.WordApi import WordApi
 from urllib.parse import urlparse, unquote
-from urllib.error import URLError
+import json
 from jinja2 import Environment, FileSystemLoader
 from vocabulary import Vocabulary
-try:
-    from apikey import WORDNIK_API_KEY
-except ImportError:
-    import sys
-    sys.exit('You need a WordNik API key. See apikey-sample.py.')
-
-WORDNIK_API_URL = 'https://api.wordnik.com/v4'
-HTML_TEMPLATE_DIR = '.'
-VOCABULARY_FILE = 'vocabulary.json'
+import define
+from config import *
 
 # ---- Functions & button actions
 # When convenient, button actions are set in the UI designer and defined here.
@@ -88,6 +80,21 @@ def action_switch_search(sender):
     vocab.fulltext_toggle(bool(sender.selected_index))
     sender.superview['table'].reload()
 
+
+def action_change_key(sender=None):
+    try:
+        with open(CONFIG_FILE, 'r') as file:
+            config = json.load(file)
+    except (FileNotFoundError, json.JSONDecodeError):
+        config = {}
+    d = dialogs.text_dialog(title='WordNik.com API Key',
+                            text=config.get('wordnik_api_key') or '')
+    if d is not None:
+        config['wordnik_api_key'] = d
+    with open(CONFIG_FILE, 'w') as file:
+        json.dump(config, file)
+    define.check_wordnik_key()
+
 # ---- The view classes
 
 
@@ -102,7 +109,6 @@ class LookupView(ui.View):
         edit_button = ui.ButtonItem(title='Edit', action=self.button_edit)
         self.right_button_items = [about_button]
         self.left_button_items = [edit_button]
-        self['search_field'].begin_editing()
     
     def button_about(self, sender):
         v = ui.load_view('about')
@@ -131,7 +137,7 @@ class LookupView(ui.View):
 
 class WordView(ui.View):
     def did_load(self):
-        self['webcontainer']['wordnik_def'].delegate = DefWebDelegate()
+        self['webcontainer']['wordnik_def'].delegate = WebDelegate()
         self['textview'].delegate = TextViewDelegate()
         self['segmentedcontrol1'].action = self.button_switch_modes
         self['webcontainer']['open_safari'].action = self.button_open_in_safari
@@ -147,31 +153,16 @@ class WordView(ui.View):
         else:
             self['segmentedcontrol1'].selected_index = 1
         self.switch_modes()
-        self.load_wordnik(word)
-
+        self.load_definition(word)
+    
     @ui.in_background
-    def load_wordnik(self, word: str):
+    def load_definition(self, word: str):
         template = jinja2env.get_template('definition.html')
-        try:
-            console.show_activity()
-            defs = wn_api.getDefinitions(word, limit=5) or []
-            suggs = wn_api.getWord(word, includeSuggestions=True)
-            console.hide_activity()
-            suggestions = suggs.suggestions or []
-            err = False
-            definitions = []
-            for d in defs:
-                definitions.append({'text': d.text,
-                                    'partOfSpeech': d.partOfSpeech,
-                                    'attributionText': d.attributionText})
-        except (URLError, AttributeError):
-            suggestions = []
-            definitions = []
-            err = True
-        html = template.render(word=word, definitions=definitions,
-                               suggestions=suggestions, error=err)
+        d = define.define(word)
+        html = template.render(**d)
         self['webcontainer']['wordnik_def'].load_html(html)
-        if definitions and not vocab.get_notes(word):
+        if d['definitions'] and not vocab.get_notes(word):
+            # only save the word to history if there are definitions for it
             vocab.set_word(word)
             main['table'].reload()
     
@@ -214,8 +205,14 @@ class AboutView(ui.View):
     def did_load(self):
         html = jinja2env.get_template('about.html')
         self['webview1'].load_html(html.render())
-        self['webview1'].delegate = AboutWebDelegate()
-        self['imageview1'].image = ui.Image.named('wordnik_badge_a1.png')
+        self['webview1'].delegate = WebDelegate()
+        img = ui.Image.named('wordnik_badge_a1.png')
+        
+        def action(sender):
+            webbrowser.get('safari').open('https://wordnik.com/')
+        self['wn_logo'].background_image = img
+        self['wn_logo'].action = action
+        self['wn_logo'].title = ''
 
 # ---- View Delegates
 
@@ -240,23 +237,29 @@ class TableViewDelegate:
             tableview.superview['toolbar']['share'].enabled = False
 
 
-class DefWebDelegate:
+class WebDelegate:
     def webview_should_start_load(self, webview, url, nav_type):
-        '''This is so that the "suggestions" links in the definition view load
-        a fresh WordView.
+        '''This handles the links in the definition WebView and about WebView.
+        Links to suggested words will load in a fresh WordView.
+        Links to external sites will load in Safari.
+        There's one special rule for changing the API key.
         '''
         if nav_type == 'link_clicked':
-            wv = webview.superview.superview
-            load_word_view(unquote(urlparse(url).fragment), wv)
-            return False
-        else:
-            return True
-
-
-class AboutWebDelegate:
-    def webview_should_start_load(self, webview, url, nav_type):
-        if nav_type == 'link_clicked':
-            webbrowser.get('safari').open(url)
+            parsed_url = urlparse(url)
+            if parsed_url.scheme == 'wordroom':
+                wv = webview.superview.superview
+                if parsed_url.netloc == 'word':
+                    load_word_view(unquote(parsed_url.path[1:]), wv)
+                elif parsed_url.netloc == '-change_key':
+                    # This is one special condition for when define.define()
+                    # returns a message asking to change an API key.
+                    action_change_key()
+                    wv.load_word(wv['word'].text)
+                else:
+                    print('unknown url:', parsed_url)
+                    return False
+            else:
+                webbrowser.get('safari').open(url)
             return False
         else:
             return True
@@ -318,27 +321,13 @@ class SearchDelegate:
             cancel.enabled = False
 
 
-class ContainerView(ui.View):
-    '''This view contains the navigation view so we can save our data. When a
-    ui.NavigationView closes, `will_close` doesn't get called on any of the
-    views inside it.
-    '''
-    def will_close(self):
-        vocab.save_json_file()
-
 if __name__ == '__main__':
     vocab = Vocabulary(data_file=VOCABULARY_FILE)
-    wn_api = WordApi(swagger.ApiClient(WORDNIK_API_KEY,
-                                       WORDNIK_API_URL))
     jinja2env = Environment(loader=FileSystemLoader(HTML_TEMPLATE_DIR))
     main = ui.load_view('lookup')
-    container = ContainerView(flex='WH')
-    container.height = main.height
-    container.width = main.width
     nav = ui.NavigationView(main, flex='WH')
     nav.height = main.height
     nav.width = main.width
-    container.add_subview(nav)
-    container.present('sheet', hide_title_bar=True)
+    nav.present('fullscreen', hide_title_bar=True)
     # if appex.is_running_extension():
     #    load_word_view(appex.get_text())

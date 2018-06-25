@@ -7,6 +7,12 @@
         font-family: -apple-system, "HelveticaNeue";
         word-wrap: break-word;
         -webkit-text-size-adjust: 100%;
+        line-height: 1.2em;
+        font-size: 17px;
+    }
+    a, a:visited, a:focus {
+        color: rgba(0, 122, 255, 1.0); /* default ui tint_color */
+        text-decoration: none;
     }
     .partOfSpeech, cite {
         font-style: italic;
@@ -15,29 +21,34 @@
     }
     .attribution {
         border-bottom: 1px lightgrey solid;
+        font-size: small;
+        line-height:1.2em;
     }
     .suggestionHead {
         font-style: italic;
     }
+    .message {
+        font-size: small;
+        text-align: center;
+        color: grey;
+        line-height:1.2em;
+    }
     </style>
 </head>
 <body>
-{% if error %}
-    <p class="error">
-        Network error.
-    </p>
-{% endif %}
 {% if not definitions %}
     <p>
         No definitions found.
     </p>
+{% else %}
+<p class="attribution">
+    <cite>{{attribution}}</cite>
+{% if attributionUrl %}
+    <a href="{{attributionUrl}}">(?)</a>
+{% endif %}
+</p>
 {% endif %}
 {% for d in definitions %}
-    {% if loop.first %}
-    <p class="attribution">
-        <cite>{{d.attributionText}}</cite>
-    </p>
-    {% endif %}
     <p class="definition">
         <span class="partOfSpeech">{{d.partOfSpeech}}</span>
         {{d.text}}
@@ -49,10 +60,15 @@
     </p>
     {% for suggestion in suggestions %}
     <p>
-        <a href="#{{suggestion}}">{{suggestion}}</a>
+        <a href="wordroom://word/{{suggestion}}">{{suggestion}}</a>
     </p>
     {% endfor %}
 {% endif %}
+{% for message in messages %}
+    <p class="message">
+        {{message}}
+    </p>
+{% endfor %}
     <footer>
     </footer>
 </body>
