@@ -21,7 +21,7 @@ There are many excellent dictionary apps available today, and it's not my intent
 
 1. Download [Pythonista](http://omz-software.com/pythonista/) for iOS. 
 2. Download the latest release of WordRoom to Pythonista. If you have a Mac or PC nearby, the easiest way of doing this is cloning a copy on those and copying it to the Pythonista iCloud folder. You can also use tools like [this script](https://github.com/cclauss/Ten-lines-or-less/blob/master/read_zipfile_from_github.py) without needing to leave your iOS device.
-3. Run `main.py` in the WordRoom folder.
+3. Run `WordRoom.py` in the WordRoom directory.
 
 ## Tips
 

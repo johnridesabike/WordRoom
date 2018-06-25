@@ -109,7 +109,6 @@ class LookupView(ui.View):
         edit_button = ui.ButtonItem(title='Edit', action=self.button_edit)
         self.right_button_items = [about_button]
         self.left_button_items = [edit_button]
-        #self['search_field'].begin_editing()
     
     def button_about(self, sender):
         v = ui.load_view('about')
@@ -208,9 +207,11 @@ class AboutView(ui.View):
         self['webview1'].load_html(html.render())
         self['webview1'].delegate = WebDelegate()
         img = ui.Image.named('wordnik_badge_a1.png')
-        a = lambda x: webbrowser.get('safari').open('https://wordnik.com/')
+        
+        def action(sender):
+            webbrowser.get('safari').open('https://wordnik.com/')
         self['wn_logo'].background_image = img
-        self['wn_logo'].action = a
+        self['wn_logo'].action = action
         self['wn_logo'].title = ''
 
 # ---- View Delegates

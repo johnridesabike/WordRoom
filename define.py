@@ -52,18 +52,18 @@ def define(word: str):
         data = wordnik(word)
     else:
         data = opted(word)
-        # this uses a special link that main.py uses to open the API Key dialog
-        m = '''WordRoom is using a limited offline dictionary.<br/><br/>
-            This app is a free personal project so I don't share my online API
-            access. <a href="https://developer.wordnik.com/">You can get your
-            own from developer.wordnik.com</a><br/><br/>
-            <a href="wordroom://-change_key">Add an API key to WordRoom 
-            here.</a>'''
-        data['messages'].append(m)
+        m = ['WordRoom is using a limited offline dictionary.',
+             '''This app is a free personal project so I don't share my online
+             API access. <a href="https://developer.wordnik.com/">You can get
+             your own from developer.wordnik.com</a>''',
+             '''<a href="wordroom://-change_key">Add an API key to WordRoom
+             here.</a>''']
+        if not data['definitions']:
+            data['messages'] += m
     data['word'] = word
     return data
 
-    
+
 def wordnik(word: str):
     try:
         console.show_activity()
@@ -75,13 +75,13 @@ def wordnik(word: str):
                         'partOfSpeech': d.partOfSpeech} for d in defs]
         if defs:
             attribution = defs[0].attributionText
-            attribution_url= defs[0].attributionUrl
+            attribution_url = defs[0].attributionUrl
         else:
             attribution = ''
-            attribution_url= ''
+            attribution_url = ''
         data = {'definitions': definitions,
                 'attribution': attribution,
-                'attributionUrl' : attribution_url,
+                'attributionUrl': attribution_url,
                 'suggestions': suggestions,
                 'messages': []}
     except URLError:
@@ -118,7 +118,7 @@ def opted(word: str):
         attribution_url = ''
     return {'definitions': definitions,
             'attribution': attr,
-            'attributionUrl' : attribution_url,
+            'attributionUrl': attribution_url,
             'suggestions': [],
             'messages': messages}
 
