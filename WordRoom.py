@@ -321,25 +321,13 @@ class SearchDelegate:
             cancel.enabled = False
 
 
-class ContainerView(ui.View):
-    '''This view contains the navigation view so we can save our data. When a
-    ui.NavigationView closes, `will_close` doesn't get called on any of the
-    views inside it.
-    '''
-    def will_close(self):
-        vocab.save_json_file()
-
 if __name__ == '__main__':
     vocab = Vocabulary(data_file=VOCABULARY_FILE)
     jinja2env = Environment(loader=FileSystemLoader(HTML_TEMPLATE_DIR))
     main = ui.load_view('lookup')
-    container = ContainerView(flex='WH')
-    container.height = main.height
-    container.width = main.width
     nav = ui.NavigationView(main, flex='WH')
     nav.height = main.height
     nav.width = main.width
-    container.add_subview(nav)
-    container.present('sheet', hide_title_bar=True)
+    nav.present('fullscreen', hide_title_bar=True)
     # if appex.is_running_extension():
     #    load_word_view(appex.get_text())

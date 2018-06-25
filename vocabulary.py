@@ -49,6 +49,7 @@ class Vocabulary:
             self._words[1][word] = notes
             if word in self._words[0]:  # deletes duplicates
                 del self._words[0][word]
+        self.save_json_file()
 
     def get_notes(self, word: str, ):
         '''looks up a word and returns its notes. Words without
@@ -100,6 +101,7 @@ class Vocabulary:
     def delete_word(self, section: int, word: str):
         word = word.strip()
         del self._words[section][word]
+        self.save_json_file()
 
     def random_word(self):
         return random.choice(list(self._words[0].keys()))
