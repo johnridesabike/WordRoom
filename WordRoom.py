@@ -18,17 +18,16 @@ from config import *
 # classes.
 
 
-def load_word_view(word: str='', parent_view=None):
-    '''If this is called from a view that's not the main view, the view needs
-    to be passed in order to call the navigation view.
-    '''
-    if not parent_view:
-        parent_view = main
-    v = ui.load_view('word')
-    v.load_word(word)
-    parent_view.navigation_view.push_view(v)
+def load_word_view(word: str=''):
+    if container.width >= 678:
+        container.content_column.load_word(word)
+    else:
+        v = ui.load_view('word')
+        v.load_word(word)
+        container.nav_column.push_view(v)
+    container.open_words = [word]
 
-    
+
 def action_random(sender):
     load_word_view(vocab.random_word())
 
@@ -68,7 +67,7 @@ def action_import(sender):
         dialogs.hud_alert('Import was successful.')
         main['table'].reload()
 
-              
+
 def action_cancel(sender):
     search = sender.superview['search_field']
     search.text = ''
@@ -102,37 +101,40 @@ class LookupView(ui.View):
     def did_load(self):
         self['table'].data_source = vocab
         self['table'].delegate = TableViewDelegate()
+        self['table'].allows_multiple_selection_during_editing = False
+        self['table'].allows_selection_during_editing = False
         self['search_field'].delegate = SearchDelegate()
-        self['toolbar']['delete'].action = self.button_delete
+        #self['toolbar']['delete'].action = self.button_delete
         about_img = ui.Image.named('iob:ios7_help_outline_24')
         about_button = ui.ButtonItem(image=about_img, action=self.button_about)
         edit_button = ui.ButtonItem(title='Edit', action=self.button_edit)
         self.right_button_items = [about_button]
         self.left_button_items = [edit_button]
-    
+
     def button_about(self, sender):
         v = ui.load_view('about')
-        self.navigation_view.push_view(v)
-    
+        v.present('sheet')
+        #self.navigation_view.push_view(v)
+
     def button_edit(self, sender):
         if self['table'].editing:
             self.end_editing()
         else:
             self.start_editing()
-    
+
     def start_editing(self):
         self['table'].set_editing(True, True)
         self.left_button_items[0].title = 'Done'
-    
+
     def end_editing(self):
         self['table'].set_editing(False, True)
         self['toolbar']['share'].enabled = False
-        self['toolbar']['delete'].enabled = False
+        #self['toolbar']['delete'].enabled = False
         self.left_button_items[0].title = 'Edit'
-    
-    def button_delete(self, sender):
-        self['table'].data_source.tableview_delete_multiple(self['table'])
-        self.button_edit(sender)
+
+    #def button_delete(self, sender):
+    #    self['table'].data_source.tableview_delete_multiple(self['table'])
+    #    self.button_edit(sender)
 
 
 class WordView(ui.View):
@@ -144,7 +146,7 @@ class WordView(ui.View):
         share_img = ui.Image.named('iob:ios7_upload_outline_32')
         share_button = ui.ButtonItem(image=share_img, action=self.button_share)
         self.right_button_items = [share_button]
-        
+
     def load_word(self, word: str):
         self['word'].text = word
         self['textview'].text = vocab.get_notes(word)
@@ -154,7 +156,7 @@ class WordView(ui.View):
             self['segmentedcontrol1'].selected_index = 1
         self.switch_modes()
         self.load_definition(word)
-    
+
     @ui.in_background
     def load_definition(self, word: str):
         template = jinja2env.get_template('definition.html')
@@ -165,7 +167,7 @@ class WordView(ui.View):
             # only save the word to history if there are definitions for it
             vocab.set_word(word)
             main['table'].reload()
-    
+
     def button_share(self, sender):
         '''Note: I might update this with more softisticated markup.'''
         options = ['Share Word', 'Share Word & Notes']
@@ -178,24 +180,24 @@ class WordView(ui.View):
         else:  # no option was selected
             return
         dialogs.share_text(text)
-    
+
     def button_open_in_safari(self, sender):
         word = self['word'].text
         webbrowser.get('safari').open('https://wordnik.com/words/' + word)
-    
+
     def button_switch_modes(self, sender):
         self.switch_modes()
-    
+
     def switch_modes(self):
         def switch_webview():
             self['textview'].end_editing()
             self['webcontainer'].alpha = 1.0
             self['textview'].alpha = 0.0
-            
+
         def switch_textview():
             self['webcontainer'].alpha = 0.0
             self['textview'].alpha = 1.0
-        
+
         animations = (switch_textview, switch_webview)
         index = self['segmentedcontrol1'].selected_index
         ui.animate(animations[index])
@@ -207,12 +209,65 @@ class AboutView(ui.View):
         self['webview1'].load_html(html.render())
         self['webview1'].delegate = WebDelegate()
         img = ui.Image.named('wordnik_badge_a1.png')
-        
+
         def action(sender):
             webbrowser.get('safari').open('https://wordnik.com/')
         self['wn_logo'].background_image = img
         self['wn_logo'].action = action
         self['wn_logo'].title = ''
+
+
+class AdaptiveView(ui.View):
+    # contains all other views
+    def __init__(self, nav_column, content_column):
+        # Putting content_column inside a NavigationView is a hack just to make
+        # its title bar visible
+        self.add_subview(nav_column)
+        self.add_subview(ui.NavigationView(content_column))
+        self.content_column = content_column
+        self.nav_column = nav_column
+        # open_words will probably always just have one item, but it's
+        # technically possible to have more than one open.
+        self.open_words = []
+        self._last_view = None
+        self.name = 'WordRoom'
+        self.background_color = 'lightgrey'
+
+    def layout(self):
+        # 678 is the width of an iPad pro app in 1/2 split mode.
+        # As far as I know, it's the smallest of the "regular" resolutions
+        if self.width >= 678 and self._last_view != 'regular':
+            self.regular()
+        elif self.width < 678 and self._last_view != 'compact':
+            self.compact()
+
+    def compact(self):
+        self._last_view = 'compact'
+        nav, content = self.subviews
+        nav.width = self.width
+        nav.height = self.height
+        nav.flex = 'WH'
+        content.hidden = True
+        for word in self.open_words:
+            w = ui.load_view('word')
+            w.load_word(word)
+            nav.push_view(w, False)
+
+    def regular(self):
+        self._last_view = 'regular'
+        nav, content = self.subviews
+        nav.width = 320
+        nav.height = self.height
+        nav.flex = 'H'
+        content.hidden = False
+        content.flex = 'WHR'
+        content.y = 0  # 32
+        content.x = nav.width + 1
+        content.width = self.width - nav.width
+        content.height = self.height
+        for word in self.open_words:
+            nav.pop_view(False)
+            self.content_column.load_word(word)
 
 # ---- View Delegates
 
@@ -223,17 +278,16 @@ class TableViewDelegate:
         Note: setting the `action` attribute in the UI designer would pass an
         empty ui.ListDataSource as the sender. This method fixes that.
         '''
-        if tableview.editing:
-            tableview.superview['toolbar']['delete'].enabled = True
-            tableview.superview['toolbar']['share'].enabled = True
-        else:
+        #tableview.superview['toolbar']['delete'].enabled = True
+        tableview.superview['toolbar']['share'].enabled = True
+        if not tableview.editing:
             item = vocab.tableview_cell_for_row(tableview,
                                                 section, row)
             load_word_view(item.text_label.text)
-                
+
     def tableview_did_deselect(self, tableview, section, row):
         if not tableview.selected_rows and tableview.editing:
-            tableview.superview['toolbar']['delete'].enabled = False
+            #tableview.superview['toolbar']['delete'].enabled = False
             tableview.superview['toolbar']['share'].enabled = False
 
 
@@ -249,7 +303,7 @@ class WebDelegate:
             if parsed_url.scheme == 'wordroom':
                 wv = webview.superview.superview
                 if parsed_url.netloc == 'word':
-                    load_word_view(unquote(parsed_url.path[1:]), wv)
+                    wv.load_word(unquote(parsed_url.path[1:]))
                 elif parsed_url.netloc == '-change_key':
                     # This is one special condition for when define.define()
                     # returns a message asking to change an API key.
@@ -277,7 +331,7 @@ class TextViewDelegate:
 class SearchDelegate:
     def __init__(self):
         self._editing = False  # used to show/hide the "Cancel" button
-        
+
     def textfield_did_change(self, textfield):
         vocab.set_query(textfield.text)
         if textfield.text.find('#') != -1:
@@ -299,23 +353,25 @@ class SearchDelegate:
     def textfield_did_begin_editing(self, textfield):
         '''Animates the "Cancel" button'''
         self._editing = True
-        cancel = textfield.superview['cancel']
-        
+        view = textfield.superview
+        cancel = view['cancel']
+
         def animation():
             textfield.width -= cancel.width + 6
-            cancel.x = main.width - cancel.width - 6
+            cancel.x = view.width - cancel.width - 6
         if not textfield.text:
             ui.animate(animation)
             cancel.enabled = True
-        
+
     def textfield_did_end_editing(self, textfield):
         '''Animates the "Cancel" button'''
         self._editing = False
-        cancel = textfield.superview['cancel']
-        
+        view = textfield.superview
+        cancel = view['cancel']
+
         def animation():
-            textfield.width = main.width - 12
-            cancel.x = main.width + 6
+            textfield.width = view.width - 12
+            cancel.x = view.width + 6
         if not textfield.text:
             ui.animate(animation)
             cancel.enabled = False
@@ -325,9 +381,9 @@ if __name__ == '__main__':
     vocab = Vocabulary(data_file=VOCABULARY_FILE)
     jinja2env = Environment(loader=FileSystemLoader(HTML_TEMPLATE_DIR))
     main = ui.load_view('lookup')
-    nav = ui.NavigationView(main, flex='WH')
-    nav.height = main.height
-    nav.width = main.width
-    nav.present('fullscreen', hide_title_bar=True)
+    nav_view = ui.NavigationView(main, flex='WH')
+    word_view = ui.load_view('word')
+    container = AdaptiveView(nav_view, word_view)
+    container.present('fullscreen', hide_title_bar=True)
     # if appex.is_running_extension():
     #    load_word_view(appex.get_text())
