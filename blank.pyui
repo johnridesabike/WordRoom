@@ -1,0 +1,37 @@
+[
+  {
+    "nodes" : [
+      {
+        "nodes" : [
+
+        ],
+        "frame" : "{{6, 144}, {308, 48}}",
+        "class" : "Label",
+        "attributes" : {
+          "flex" : "W",
+          "name" : "label3",
+          "text_color" : "RGBA(0.501961,0.501961,0.501961,1.000000)",
+          "frame" : "{{85, 224}, {150, 32}}",
+          "uuid" : "51E40C16-1DFD-4F70-B2A0-3AC239A4D882",
+          "class" : "Label",
+          "alignment" : "center",
+          "text" : "No Word Selected",
+          "font_size" : 32,
+          "font_name" : "<System>"
+        },
+        "selected" : false
+      }
+    ],
+    "frame" : "{{0, 0}, {320, 480}}",
+    "class" : "View",
+    "attributes" : {
+      "border_color" : "RGBA(0.000000,0.000000,0.000000,1.000000)",
+      "enabled" : true,
+      "background_color" : "RGBA(1.000000,1.000000,1.000000,1.000000)",
+      "name" : "blank",
+      "tint_color" : "RGBA(0.000000,0.478000,1.000000,1.000000)",
+      "flex" : ""
+    },
+    "selected" : false
+  }
+]

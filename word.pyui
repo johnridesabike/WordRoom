@@ -5,7 +5,7 @@
         "nodes" : [
 
         ],
-        "frame" : "{{6, 46}, {308, 24}}",
+        "frame" : "{{12, 52}, {296, 24}}",
         "class" : "SegmentedControl",
         "attributes" : {
           "action" : "",
@@ -24,23 +24,23 @@
             "nodes" : [
 
             ],
-            "frame" : "{{6, 6}, {308, 433}}",
+            "frame" : "{{6, 6}, {308, 427}}",
             "class" : "WebView",
             "attributes" : {
-              "flex" : "WH",
-              "frame" : "{{60, 119}, {200, 200}}",
               "uuid" : "44BF3BF4-D284-4002-A17A-4F467312E73F",
+              "frame" : "{{60, 119}, {200, 200}}",
+              "scales_to_fit" : false,
               "class" : "WebView",
-              "name" : "wordnik_def",
-              "scales_to_fit" : false
+              "name" : "html_definition",
+              "flex" : "WH"
             },
-            "selected" : false
+            "selected" : true
           },
           {
             "nodes" : [
 
             ],
-            "frame" : "{{6, 452}, {308, 32}}",
+            "frame" : "{{6, 446}, {308, 32}}",
             "class" : "Button",
             "attributes" : {
               "action" : "",
@@ -55,7 +55,7 @@
             "selected" : false
           }
         ],
-        "frame" : "{{0, 78}, {320, 490}}",
+        "frame" : "{{0, 84}, {320, 484}}",
         "class" : "View",
         "attributes" : {
           "flex" : "WH",
@@ -64,13 +64,13 @@
           "name" : "webcontainer",
           "uuid" : "F871C612-44A3-4D8F-9FF0-ED0118103E8E"
         },
-        "selected" : true
+        "selected" : false
       },
       {
         "nodes" : [
 
         ],
-        "frame" : "{{6, 78}, {308, 484}}",
+        "frame" : "{{6, 84}, {308, 478}}",
         "class" : "TextView",
         "attributes" : {
           "uuid" : "71507439-4074-41F4-996C-063BA99A5167",
@@ -95,17 +95,17 @@
         "nodes" : [
 
         ],
-        "frame" : "{{6, 6}, {308, 32}}",
+        "frame" : "{{12, 6}, {296, 38}}",
         "class" : "Label",
         "attributes" : {
           "flex" : "W",
-          "font_size" : 24,
+          "name" : "word",
           "frame" : "{{85, 268}, {150, 32}}",
           "uuid" : "B929A912-EA55-4D31-9FC8-E0F7FD9BBE56",
           "class" : "Label",
           "alignment" : "left",
-          "text" : "Word",
-          "name" : "word",
+          "text" : "",
+          "font_size" : 32,
           "font_name" : "<System-Bold>"
         },
         "selected" : false

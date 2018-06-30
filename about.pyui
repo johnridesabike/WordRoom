@@ -5,18 +5,18 @@
         "nodes" : [
 
         ],
-        "frame" : "{{6, 530}, {151, 32}}",
+        "frame" : "{{6, 502}, {150, 32}}",
         "class" : "Button",
         "attributes" : {
           "action" : "action_export",
-          "flex" : "WT",
+          "flex" : "LRT",
           "image_name" : "iob:ios7_upload_outline_32",
           "frame" : "{{120, 224}, {80, 32}}",
           "title" : "Export \/ Backup",
           "uuid" : "6D5E98D2-E20A-46FC-B7F7-9A2FA0AF79D1",
           "class" : "Button",
-          "font_size" : 15,
-          "name" : "button1"
+          "name" : "button1",
+          "font_size" : 15
         },
         "selected" : false
       },
@@ -24,18 +24,18 @@
         "nodes" : [
 
         ],
-        "frame" : "{{163, 530}, {151, 32}}",
+        "frame" : "{{384, 502}, {150, 32}}",
         "class" : "Button",
         "attributes" : {
           "action" : "action_import",
-          "flex" : "WT",
+          "flex" : "LRT",
           "image_name" : "iob:ios7_download_outline_32",
           "frame" : "{{120, 224}, {80, 32}}",
           "title" : "Import \/ Restore",
           "uuid" : "9FC2E935-1714-4D41-999D-D603D3346A42",
           "class" : "Button",
-          "font_size" : 15,
-          "name" : "button2"
+          "name" : "button2",
+          "font_size" : 15
         },
         "selected" : false
       },
@@ -43,7 +43,7 @@
         "nodes" : [
 
         ],
-        "frame" : "{{6, 6}, {308, 442}}",
+        "frame" : "{{6, 6}, {528, 414}}",
         "class" : "WebView",
         "attributes" : {
           "uuid" : "344943C4-593C-4F71-B6AE-695D89A051CD",
@@ -59,17 +59,17 @@
         "nodes" : [
 
         ],
-        "frame" : "{{6, 490}, {308, 32}}",
+        "frame" : "{{116, 462}, {308, 32}}",
         "class" : "Button",
         "attributes" : {
           "flex" : "LRT",
           "action" : "action_change_key",
-          "name" : "button3",
+          "font_size" : 15,
           "frame" : "{{120, 268}, {80, 32}}",
           "title" : "Change WordNik API Key",
           "uuid" : "CE1EFED5-CD80-49E2-9786-81C38DC400E2",
           "class" : "Button",
-          "font_size" : 15,
+          "name" : "button3",
           "image_name" : "iob:key_24"
         },
         "selected" : false
@@ -78,7 +78,7 @@
         "nodes" : [
 
         ],
-        "frame" : "{{51.5, 456}, {216, 26}}",
+        "frame" : "{{160, 428}, {216, 26}}",
         "class" : "Button",
         "attributes" : {
           "flex" : "LRT",
@@ -92,7 +92,7 @@
         "selected" : false
       }
     ],
-    "frame" : "{{0, 0}, {320, 568}}",
+    "frame" : "{{0, 0}, {540, 540}}",
     "class" : "View",
     "attributes" : {
       "flex" : "",

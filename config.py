@@ -1,3 +1,4 @@
+"""This module contains the constants."""
 HTML_TEMPLATE_DIR = '.'
 VOCABULARY_FILE = 'vocabulary.json'
 CONFIG_FILE = 'config.json'
