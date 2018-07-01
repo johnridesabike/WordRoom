@@ -3,10 +3,9 @@
 
 It's used as a data source for the main table.
 """
-import ui
-import console
 import json
 import random
+import ui
 
 
 class Vocabulary:
@@ -36,10 +35,10 @@ class Vocabulary:
             with open('default-' + filename, 'r') as infile:
                 self._words = json.load(infile)
 
-    def save_json_file(self):
+    def save_json_file(self, indent = None):
         """Save vocabulary data to the JSON file."""
         with open(self.data_file, 'w') as outfile:
-            json.dump(self._words, outfile)
+            json.dump(self._words, outfile, indent=indent)
 
     def set_word(self, word: str, notes=''):
         """Add a word or updates the word if it already exists.
@@ -93,7 +92,7 @@ class Vocabulary:
         else:
             return None
 
-    def get_notes(self, word: str, ):
+    def get_notes(self, word: str):
         """Look up a word and return its notes.
 
         Words without notes return empty strings. This can be used to check if
@@ -137,6 +136,27 @@ class Vocabulary:
         word = word.strip()
         del self._words[section][word]
         self.save_json_file()
+
+    def delete_multiple(self, rows: list):
+        """Call to delete several words at once.
+        
+        Returns an iterator of the words deleted.
+        """
+        # first we extract the words from the rows
+        wordlist = []
+        for row in rows:
+            s = row[0]
+            if self._query:
+                s -= 1
+            word = self.list_words(section=s)[row[1]]
+            wordlist.append((s, word))
+        # then we deleted them
+        # it has to be a two-step process or else the indexes will be off
+        for section, word in wordlist:
+            del self._words[section][word]
+        self.save_json_file()
+        # Then we return the words
+        return (x[1] for x in wordlist)
 
     def random_word(self):
         """Return a random word with notes."""
@@ -220,33 +240,3 @@ class Vocabulary:
         wordview = tableview.superview.navigation_view.superview.content_column
         if wordview['word'].text == word:
             wordview.clear()
-
-    def tableview_delete_multiple(self, tableview):
-        """Call to delete several words at once.
-
-        This isn't a standard tableview method. I might rewrite this because
-        it's kind of ugly.
-        """
-        rows = tableview.selected_rows
-        wordview = tableview.superview.navigation_view.superview.content_column
-        wordlist = []
-        for row in rows:
-            s = row[0]
-            if self._query:
-                s -= 1
-            word = self.list_words(section=s)[row[1]]
-            wordlist.append((s, word))
-        for w in wordlist:
-            # This is a slightly hacky way to make sure that when the selected
-            # word is deleted, it also gets cleared from the WordView
-            section, word = w
-            if wordview['word'].text == word:
-                wordview.clear()
-            self.delete_word(section, word)
-        # `tableview.delete_rows` uses backwards tuples. This fixes it.
-        # https://forum.omz-software.com/topic/2733/delete-rows-in-tableview/6
-        backwards_rows = []
-        for row in rows:
-            backwards_rows.append((row[1], row[0]))
-        tableview.delete_rows(backwards_rows)
-        console.hud_alert('Deleted %s word(s).' % len(rows))

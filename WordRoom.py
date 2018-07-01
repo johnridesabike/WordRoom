@@ -31,10 +31,9 @@ __email__ = "jbpjackson@icloud.com"
 
 def load_word_view(word=''):
     """Open a WordView."""
-    if container.current_layout != 'compact':
+    layout = container.objc_instance.traitCollection().horizontalSizeClass()
+    if layout == AdaptiveView.REGULAR:
         word_view.load_word(word)
-        if container.current_layout == 'regular_narrow':
-            ui.animate(container.hide_menu)
     else:
         compact_word_view.load_word(word)
         container.nav_column.push_view(compact_word_view)
@@ -69,7 +68,7 @@ def action_share_multiple(sender):
 
 def action_export(sender):
     """Open the iOS share dialog to send the vocabulary data file."""
-    vocab.save_json_file()
+    vocab.save_json_file(indent=1)
     console.open_in(VOCABULARY_FILE)
 
 
@@ -85,6 +84,7 @@ def action_import(sender):
         f = dialogs.pick_document(types=['public.text'])
         try:
             vocab.load_json_file(f)
+            vocab.save_json_file()
         except json.JSONDecodeError:
             dialogs.hud_alert('Invalid JSON file.', icon='error')
             return
@@ -145,7 +145,7 @@ class LookupView(ui.View):
         self['editbar']['delete'].action = self.action_delete
         self['toolbar']['edit'].action = self.start_editing
         self['editbar']['done'].action = self.end_editing
-        about_img = ui.Image.named('iob:ios7_help_24')
+        about_img = ui.Image.named('iob:ios7_help_outline_24')
         about_button = ui.ButtonItem(image=about_img, action=action_about)
         self.right_button_items = [about_button]
         close_img = ui.Image.named('iob:close_round_24')
@@ -173,7 +173,15 @@ class LookupView(ui.View):
 
     def action_delete(self, sender):
         """Delete the selected rows."""
-        vocab.tableview_delete_multiple(self['table'])
+        rows = self['table'].selected_rows
+        words = vocab.delete_multiple(rows)
+        # `tableview.delete_rows` uses backwards tuples. This fixes it.
+        # https://forum.omz-software.com/topic/2733/delete-rows-in-tableview/6
+        self['table'].delete_rows([(x[1], x[0]) for x in rows])
+        for word in words:
+            if container.content_column['word'].text == word:
+                container.content_column.clear()
+        console.hud_alert('Deleted %s word(s).' % len(rows))
 
 
 class WordView(ui.View):
@@ -255,9 +263,8 @@ class WordView(ui.View):
 
     def action_search(self, sender):
         """Open the search box on LookupView."""
-        if container.current_layout == 'regular_narrow':
-            ui.animate(container.show_menu)
-        if container.current_layout == 'compact':
+        l = container.objc_instance.traitCollection().horizontalSizeClass()
+        if l == AdaptiveView.COMPACT:
             for word in container.open_words:
                 container.nav_column.pop_view()
         lookup_view['search_field'].begin_editing()
@@ -291,7 +298,7 @@ class WordView(ui.View):
 
 
 class AboutView(ui.View):
-    """This is the view for the "about" view."""
+    """This is the view for the "about" screen."""
 
     def did_load(self):
         """Initialize the buttons and HTML data."""
@@ -322,6 +329,9 @@ class AdaptiveView(ui.View):
     "iPad" view. Compact is the "iPhone" view. (Although compact can be shown
     in split-screen on iPad.)
     """
+    
+    COMPACT = 1
+    REGULAR = 2
 
     def __init__(self, nav_column, content_column):
         """Initialize the view with the two view columns."""
@@ -334,19 +344,19 @@ class AdaptiveView(ui.View):
         # open_words will probably always just have one item, but it's
         # technically possible to have more than one open.
         self.open_words = []
-        self.current_layout = None
+        self.last_layout = None
         # background color is used as a border between the columns.
         self.background_color = 'lightgrey'
 
     def layout(self):
         """Call when the layout changes."""
-        # 678 is the width of an iPad pro app in 1/2 split mode.
-        if self.width >= 678 and self.current_layout != 'regular':
-            self.regular()
-        elif self.width < 678 and self.current_layout != 'compact':
-            self.compact()
+        new_layout = self.objc_instance.traitCollection().horizontalSizeClass()
+        if new_layout == self.REGULAR and self.last_layout != self.REGULAR:
+            self.set_regular()
+        if new_layout == self.COMPACT and self.last_layout != self.COMPACT:
+            self.set_compact()
 
-    def compact(self):
+    def set_compact(self):
         """Render the view in compact mode.
 
         This collapses open content into the left column's NavigationView.
@@ -360,9 +370,9 @@ class AdaptiveView(ui.View):
         for word in self.open_words:
             compact_word_view.load_word(word)
             nav.push_view(compact_word_view, False)
-        self.current_layout = 'compact'
+        self.last_layout = self.COMPACT
 
-    def regular(self):
+    def set_regular(self):
         """Render the view in regular, two-column mode."""
         nav, content = self.subviews
         nav.width = 320
@@ -374,59 +384,13 @@ class AdaptiveView(ui.View):
         content.x = nav.width + 1
         content.width = self.width - nav.width - 1
         content.height = self.height
-        if self.current_layout == 'compact':
+        if self.last_layout == self.COMPACT:
             for word in self.open_words:
                 nav.pop_view(False)
                 self.content_column.load_word(word)
         self.content_column.left_button_items = []
-        self.current_layout = 'regular'
+        self.last_layout = self.REGULAR
 
-    def regular_narrow(self):
-        """Render a view halfway between regular and compact.
-
-        This features a menu that slides out with a button. It's currently not
-        implemented because I don't like the way it looks, and it doesn't
-        completely work the way users would expect.
-        """
-        nav, content = self.subviews
-        nav.width = 320
-        nav.height = self.height
-        nav.flex = 'H'
-        nav.x = -nav.width
-        content.hidden = False
-        content.flex = 'WHR'
-        content.x = self.x
-        content.width = self.width
-        content.height = self.height
-
-        def toggle_menu(sender):
-            if nav.x < self.x:
-                ui.animate(self.show_menu)
-            else:
-                ui.animate(self.hide_menu)
-        toggle_img = ui.Image.named('iob:navicon_32')
-        toggle_button = ui.ButtonItem(image=toggle_img, action=toggle_menu)
-        self.content_column.left_button_items = [toggle_button]
-        if self.current_layout == 'compact':
-            for word in self.open_words:
-                nav.pop_view(False)
-                self.content_column.load_word(word)
-        if lookup_view['search_field'].delegate.is_editing:
-            self.show_menu()
-        self.current_layout = 'regular_narrow'
-
-    def show_menu(self):
-        """Show the menu in a regular_narrow view."""
-        nav, content = self.subviews
-        nav.x = self.x
-        content.x = nav.width + 1
-
-    def hide_menu(self):
-        """Hide the menu in a regular_narrow view."""
-        nav, content = self.subviews
-        nav.x = -nav.width
-        content.x = self.x
-        lookup_view['search_field'].end_editing()
 
 # ---- View Delegates
 
