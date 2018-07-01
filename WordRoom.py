@@ -4,6 +4,7 @@
 It contains all of the UI views and actions.
 """
 # coding: utf-8
+import os.path
 import json
 import webbrowser
 from urllib.parse import urlparse, unquote
@@ -14,7 +15,7 @@ import console
 from jinja2 import Environment, FileSystemLoader
 from vocabulary import Vocabulary
 import define
-from config import VOCABULARY_FILE, CONFIG_FILE, HTML_TEMPLATE_DIR
+from config import VOCABULARY_FILE, CONFIG_FILE, HTML_DIR, UI_DIR
 
 __author__ = 'John Jackson'
 __copyright__ = 'Copyright 2018 John Jackson'
@@ -204,7 +205,7 @@ class WordView(ui.View):
         lookup_button = ui.ButtonItem(image=lookup_img,
                                       action=self.action_search)
         self.right_button_items = [share_button, lookup_button]
-        self.add_subview(ui.load_view(('blank')))
+        self.add_subview(ui.load_view(os.path.join(UI_DIR, 'blank')))
         self['blank'].background_color = 'white'
         self['blank'].flex = 'WH'
         self['blank'].frame = self.frame
@@ -263,8 +264,8 @@ class WordView(ui.View):
 
     def action_search(self, sender):
         """Open the search box on LookupView."""
-        l = container.objc_instance.traitCollection().horizontalSizeClass()
-        if l == AdaptiveView.COMPACT:
+        lo = container.objc_instance.traitCollection().horizontalSizeClass()
+        if lo == AdaptiveView.COMPACT:
             for word in container.open_words:
                 container.nav_column.pop_view()
         lookup_view['search_field'].begin_editing()
@@ -306,7 +307,8 @@ class AboutView(ui.View):
         self['webview1'].load_html(html.render())
         self['webview1'].delegate = WebDelegate()
         mode = ui.RENDERING_MODE_ORIGINAL
-        img = ui.Image.named('wordnik_badge_a1.png').with_rendering_mode(mode)
+        img_path = os.path.join(UI_DIR, 'wordnik_badge_a1.png')
+        img = ui.Image.named(img_path).with_rendering_mode(mode)
 
         def action_wordnik(sender):
             webbrowser.get('safari').open('https://wordnik.com/')
@@ -329,7 +331,7 @@ class AdaptiveView(ui.View):
     "iPad" view. Compact is the "iPhone" view. (Although compact can be shown
     in split-screen on iPad.)
     """
-    
+
     COMPACT = 1
     REGULAR = 2
 
@@ -521,12 +523,12 @@ class SearchDelegate:
 
 if __name__ == '__main__':
     vocab = Vocabulary(data_file=VOCABULARY_FILE)
-    jinja2env = Environment(loader=FileSystemLoader(HTML_TEMPLATE_DIR))
-    lookup_view = ui.load_view('lookup')
+    jinja2env = Environment(loader=FileSystemLoader(HTML_DIR))
+    lookup_view = ui.load_view(os.path.join(UI_DIR, 'lookup'))
     nav_view = ui.NavigationView(lookup_view, flex='WH')
-    word_view = ui.load_view('word')
-    compact_word_view = ui.load_view('word')
-    about_view = ui.load_view('about')
+    word_view = ui.load_view(os.path.join(UI_DIR, 'word'))
+    compact_word_view = ui.load_view(os.path.join(UI_DIR, 'word'))
+    about_view = ui.load_view(os.path.join(UI_DIR, 'about'))
     container = AdaptiveView(nav_view, word_view)
     container.name = 'WordRoom'
     container.present('fullscreen', hide_title_bar=True)
