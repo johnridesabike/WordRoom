@@ -1,15 +1,19 @@
 #!/usr/bin/env python3
+"""This module contains the functions used for retrieving word definitions.
+
+Outside of this module, you'll usually just call the define() function.
+"""
 import console
-import string
 import json
 import re
 from urllib.error import URLError
-from config import *
+from config import CONFIG_FILE
 
 WORDNIK_IS_LOADED = False
 
 
 def check_wordnik_key():
+    """Check if the WordNik API is reachable."""
     global WORDNIK_API_KEY
     global WORDNIK_IS_LOADED
     global wn_api
@@ -26,6 +30,7 @@ def check_wordnik_key():
         except NameError:
             WORDNIK_IS_LOADED = False
 
+
 try:
     from wordnik import swagger
     from wordnik.WordApi import WordApi
@@ -36,7 +41,9 @@ except ImportError:
 
 
 def define(word: str):
-    '''Returns word data in the following dictionary format:
+    """Return definition and metadata for a given word.
+
+    It's returned in the following dictionary format:
     {'word' : 'word',
      'definitions': [{'text': 'The first definition',
                       'partofspeech': 'noun'},
@@ -47,13 +54,13 @@ def define(word: str):
      'suggestions': ['suggestion one', 'suggestion two'],
      'messages' : ['error message one', 'error message two']
     }
-    '''
+    """
     if WORDNIK_IS_LOADED:
         data = wordnik(word)
     else:
         data = opted(word)
         m = ['WordRoom is using a limited offline dictionary.',
-             '''This app is a free personal project so I don't share my online
+             '''This app is a free personal project, so I don't share my online
              API access. <a href="https://developer.wordnik.com/">You can get
              your own from developer.wordnik.com</a>''',
              '''<a href="wordroom://-change_key">Add an API key to WordRoom
@@ -65,6 +72,10 @@ def define(word: str):
 
 
 def wordnik(word: str):
+    """Return the WordNik definition of a word.
+
+    If can't connect to WordNik API, then return opted() instead.
+    """
     try:
         console.show_activity()
         defs = wn_api.getDefinitions(word, limit=5) or []
@@ -95,6 +106,7 @@ opted_cache = {}
 
 
 def opted(word: str):
+    """Return the OPTED definition of a word."""
     messages = []
     alpha = re.sub('[^a-zA-Z]', '', word)[:1].lower()
     if not opted_cache.get(alpha) and alpha:
@@ -121,6 +133,3 @@ def opted(word: str):
             'attributionUrl': attribution_url,
             'suggestions': [],
             'messages': messages}
-
-if __name__ == '__main__':
-    print('Ya done goofed. Try running main.py instead.')

@@ -5,7 +5,7 @@
         "nodes" : [
 
         ],
-        "frame" : "{{322, 6}, {56, 32}}",
+        "frame" : "{{322, 6}, {66, 34}}",
         "class" : "Button",
         "attributes" : {
           "action" : "action_cancel",
@@ -24,7 +24,7 @@
         "nodes" : [
 
         ],
-        "frame" : "{{6, 78}, {308, 444}}",
+        "frame" : "{{6, 80}, {308, 442}}",
         "class" : "TableView",
         "attributes" : {
           "uuid" : "F5AA4891-AF66-457E-9AF3-F41AC1896E3A",
@@ -50,33 +50,13 @@
             "nodes" : [
 
             ],
-            "frame" : "{{138, 0}, {32, 32}}",
-            "class" : "Button",
-            "attributes" : {
-              "action" : "action_random",
-              "flex" : "WLRT",
-              "font_size" : 15,
-              "frame" : "{{122, 15}, {80, 32}}",
-              "title" : "",
-              "uuid" : "38864F81-698F-4C2E-9D75-102D3DCC78E4",
-              "class" : "Button",
-              "name" : "button3",
-              "image_name" : "iob:shuffle_32"
-            },
-            "selected" : false
-          },
-          {
-            "nodes" : [
-
-            ],
-            "frame" : "{{7, 0}, {32, 32}}",
+            "frame" : "{{120, 0}, {64, 32}}",
             "class" : "Button",
             "attributes" : {
               "flex" : "RT",
-              "image_name" : "iob:ios7_trash_outline_32",
               "frame" : "{{120, -4}, {80, 32}}",
               "tint_color" : "RGBA(1.000000,0.000000,0.000000,1.000000)",
-              "title" : "",
+              "title" : "Delete",
               "uuid" : "6F086BC6-EB96-4229-BD11-F3130457CF24",
               "class" : "Button",
               "custom_attributes" : "{'enabled' : False}",
@@ -89,24 +69,39 @@
             "nodes" : [
 
             ],
-            "frame" : "{{270, 0}, {32, 32}}",
+            "frame" : "{{250, 0}, {58, 32}}",
             "class" : "Button",
             "attributes" : {
               "flex" : "LT",
               "action" : "action_share_multiple",
-              "name" : "share",
               "frame" : "{{120, 0}, {80, 32}}",
-              "title" : "",
+              "title" : "Share",
               "uuid" : "38E0D757-19BA-482B-9610-894C16258825",
               "class" : "Button",
               "custom_attributes" : "{'enabled' : False}",
-              "font_size" : 15,
-              "image_name" : "iob:ios7_upload_outline_32"
+              "name" : "share",
+              "font_size" : 18
+            },
+            "selected" : false
+          },
+          {
+            "nodes" : [
+
+            ],
+            "frame" : "{{0, 0}, {58, 32}}",
+            "class" : "Button",
+            "attributes" : {
+              "uuid" : "14BE9CF2-2DE8-4568-A6D8-C380617C3C36",
+              "frame" : "{{114, 0}, {80, 32}}",
+              "title" : "Done",
+              "class" : "Button",
+              "name" : "done",
+              "font_size" : 18
             },
             "selected" : false
           }
         ],
-        "frame" : "{{6, 530}, {308, 32}}",
+        "frame" : "{{6, 570}, {308, 32}}",
         "class" : "View",
         "attributes" : {
           "flex" : "WT",
@@ -116,7 +111,7 @@
           "class" : "View",
           "corner_radius" : 0,
           "uuid" : "2D826A6A-BB75-45C4-917F-95D18896F160",
-          "name" : "toolbar"
+          "name" : "editbar"
         },
         "selected" : false
       },
@@ -124,7 +119,7 @@
         "nodes" : [
 
         ],
-        "frame" : "{{6, 6}, {308, 32}}",
+        "frame" : "{{6, 6}, {308, 34}}",
         "class" : "TextField",
         "attributes" : {
           "uuid" : "A19C1DE7-FF48-4092-A269-2FEBB9C221DC",
@@ -139,7 +134,7 @@
           "spellchecking_type" : "default",
           "class" : "TextField",
           "name" : "search_field",
-          "font_size" : 17
+          "font_size" : 20
         },
         "selected" : false
       },
@@ -147,7 +142,7 @@
         "nodes" : [
 
         ],
-        "frame" : "{{6, 46}, {308, 24}}",
+        "frame" : "{{6, 48}, {308, 24}}",
         "class" : "SegmentedControl",
         "attributes" : {
           "action" : "action_switch_search",
@@ -159,6 +154,57 @@
           "name" : "segmentedcontrol1"
         },
         "selected" : false
+      },
+      {
+        "nodes" : [
+          {
+            "nodes" : [
+
+            ],
+            "frame" : "{{230, 0}, {72, 32}}",
+            "class" : "Button",
+            "attributes" : {
+              "action" : "action_random",
+              "flex" : "WLRT",
+              "frame" : "{{114, 0}, {80, 32}}",
+              "title" : "Random",
+              "uuid" : "FE35D5FD-3D41-4014-A5A2-F446942489B6",
+              "class" : "Button",
+              "font_size" : 18,
+              "name" : "button1"
+            },
+            "selected" : false
+          },
+          {
+            "nodes" : [
+
+            ],
+            "frame" : "{{0, 0}, {48, 32}}",
+            "class" : "Button",
+            "attributes" : {
+              "uuid" : "225C300A-688A-4132-8827-9901B3A900C8",
+              "frame" : "{{114, 0}, {80, 32}}",
+              "title" : "Edit",
+              "class" : "Button",
+              "name" : "edit",
+              "font_size" : 18
+            },
+            "selected" : false
+          }
+        ],
+        "frame" : "{{6, 530}, {308, 32}}",
+        "class" : "View",
+        "attributes" : {
+          "flex" : "WT",
+          "border_width" : 0,
+          "alpha" : 1,
+          "frame" : "{{110, 234}, {100, 100}}",
+          "class" : "View",
+          "uuid" : "391EEF0C-CF69-4793-987D-8718C98FB8A7",
+          "corner_radius" : 0,
+          "name" : "toolbar"
+        },
+        "selected" : true
       }
     ],
     "frame" : "{{0, 0}, {320, 568}}",
@@ -170,7 +216,7 @@
       "tint_color" : "RGBA(0.000000,0.478000,1.000000,1.000000)",
       "border_color" : "RGBA(0.000000,0.000000,0.000000,1.000000)",
       "background_color" : "RGBA(1.000000,1.000000,1.000000,1.000000)",
-      "name" : "WordRoom"
+      "name" : "Vocabulary List"
     },
     "selected" : false
   }

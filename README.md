@@ -15,12 +15,15 @@ But I can imagine that this app could have pratical uses beyond the curiosity of
 
 There are many excellent dictionary apps available today, and it's not my intention to reinvent their good work. I'm particularly fond of [Terminology](https://agiletortoise.com/terminology/). I've designed WordRoom to be more of a companion to other apps rather than a replacement.
 
-![Screenshot](screenshot1.png) ![Screenshot](screenshot2.png) ![Screenshot](screenshot3.png) ![Screenshot](screenshot4.png)
+![Screenshot](screenshot1.png) ![Screenshot](screenshot2.png) ![Screenshot](screenshot3.png)
 
 ## Installation
 
 1. Download [Pythonista](http://omz-software.com/pythonista/) for iOS. 
-2. Download the latest release of WordRoom to Pythonista. If you have a Mac or PC nearby, the easiest way of doing this is cloning a copy on those and copying it to the Pythonista iCloud folder. You can also use tools like [this script](https://github.com/cclauss/Ten-lines-or-less/blob/master/read_zipfile_from_github.py) without needing to leave your iOS device.
+2. Download the latest release of WordRoom to Pythonista. You can easily install it by copying and pasting this line of code into your Pythonista console:
+```
+import requests as r; exec(r.get('https://bit.ly/2tFpuZh').text)
+```
 3. Run `WordRoom.py` in the WordRoom directory.
 
 ## Tips
