@@ -73,6 +73,7 @@ def action_export(sender):
     console.open_in(VOCABULARY_FILE)
 
 
+@ui.in_background  # otherwise the alert is blocked
 def action_import(sender):
     """Import a new vocabulary file.
 
@@ -84,13 +85,15 @@ def action_import(sender):
     if choice:
         f = dialogs.pick_document(types=['public.text'])
         try:
-            vocab.load_json_file(f)
-            vocab.save_json_file()
+            if f is not None:
+                vocab.load_json_file(f)
+                vocab.save_json_file()
         except json.JSONDecodeError:
             dialogs.hud_alert('Invalid JSON file.', icon='error')
             return
-        dialogs.hud_alert('Import was successful.')
-        lookup_view['table'].reload()
+        if f is not None:
+            dialogs.hud_alert('Import was successful.')
+            lookup_view['table'].reload()
 
 
 def action_cancel(sender):

@@ -35,7 +35,7 @@ class Vocabulary:
             with open('default-' + filename, 'r') as infile:
                 self._words = json.load(infile)
 
-    def save_json_file(self, indent = None):
+    def save_json_file(self, indent=None):
         """Save vocabulary data to the JSON file."""
         with open(self.data_file, 'w') as outfile:
             json.dump(self._words, outfile, indent=indent)
@@ -139,7 +139,7 @@ class Vocabulary:
 
     def delete_multiple(self, rows: list):
         """Call to delete several words at once.
-        
+
         Returns an iterator of the words deleted.
         """
         # first we extract the words from the rows
