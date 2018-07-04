@@ -19,7 +19,7 @@ class Vocabulary:
         """Load the vocabulary from a given data file."""
         # _words[0] is words with notes. _words[1] is history
         self._words = [{}, {}]
-        self._query = ''  # used for searching the list
+        self.query = ''  # used for searching the list
         self.fulltext_toggle = False
         self.data_file = data_file
         self.load_json_file()
@@ -59,7 +59,7 @@ class Vocabulary:
         self._words[section][word] = notes
         self.save_json_file()
         row = self.list_words(section).index(word)
-        if self._query:
+        if self.query:
             section += 1
         if new_word:
             return row, section
@@ -86,7 +86,7 @@ class Vocabulary:
             row = self.list_words(0).index(word)
         if section is not None:
             self.delete_word(section, word)
-            if self._query:
+            if self.query:
                 section += 1
             return row, section
         else:
@@ -109,14 +109,14 @@ class Vocabulary:
 
         To "unset" the query, just set an empty string.
         """
-        self._query = query.strip()
+        self.query = query.strip()
 
     def _filter_query(self, word):
         hasdef = False
         if self.fulltext_toggle and word in self._words[0]:
             w = self._words[0][word].casefold()
-            hasdef = w.find(self._query.casefold()) != -1
-        wordbegins = word.casefold().startswith(self._query.casefold())
+            hasdef = w.find(self.query.casefold()) != -1
+        wordbegins = word.casefold().startswith(self.query.casefold())
         return hasdef or wordbegins
 
     def count_words(self, section: int):
@@ -125,7 +125,7 @@ class Vocabulary:
 
     def list_words(self, section: int):
         """Return a list of words in a section."""
-        if self._query:
+        if self.query:
             words = filter(self._filter_query, self._words[section].keys())
         else:
             words = self._words[section].keys()
@@ -146,7 +146,7 @@ class Vocabulary:
         wordlist = []
         for row in rows:
             s = row[0]
-            if self._query:
+            if self.query:
                 s -= 1
             word = self.list_words(section=s)[row[1]]
             wordlist.append((s, word))
@@ -168,7 +168,7 @@ class Vocabulary:
 
     def tableview_number_of_sections(self, tableview):
         """Return the number of sections."""
-        if self._query:
+        if self.query:
             # when there's a query, we add a section for it.
             return 3
         else:
@@ -177,17 +177,17 @@ class Vocabulary:
     def tableview_title_for_header(self, tableview, section):
         """Return a title for the given section."""
         headers = ['Words with notes', 'Words from history']
-        if self._query:
+        if self.query:
             # returns an extra section for search suggestions
             headers.insert(0, '')
         return headers[section]
 
     def tableview_number_of_rows(self, tableview, section):
         """Return the number of rows in the section."""
-        if self._query and section == 0:
+        if self.query and section == 0:
             # The search suggestions always have 1 row.
             return 1
-        elif self._query:
+        elif self.query:
             # The extra section doesn't exist in the data, so we delete it
             # before calling other methods
             section -= 1
@@ -195,16 +195,16 @@ class Vocabulary:
 
     def tableview_cell_for_row(self, tableview, section, row):
         """Create and return a cell for the given section/row."""
-        if self._query and section == 0 and row == 0:
+        if self.query and section == 0 and row == 0:
             # Adds a special table cell for search suggestions
             cell = ui.TableViewCell('value1')
-            cell.text_label.text = self._query
-            detail = 'Look up “' + self._query + '”'
+            cell.text_label.text = self.query
+            detail = 'Look up “' + self.query + '”'
             cell.detail_text_label.text = detail
             cell.image_view.image = ui.Image.named('iob:ios7_search_24')
             cell.accessory_type = 'disclosure_indicator'
             return cell
-        elif self._query:
+        elif self.query:
             # The extra section doesn't exist in the data, so we delete it
             # before calling other methods
             section -= 1
@@ -220,7 +220,7 @@ class Vocabulary:
 
     def tableview_can_delete(self, tableview, section, row):
         """Return True if the user should be able to delete the given row."""
-        if self._query and section == 0:  # Can't delete suggestions
+        if self.query and section == 0:  # Can't delete suggestions
             return False
         else:
             return True
@@ -228,7 +228,7 @@ class Vocabulary:
     def tableview_delete(self, tableview, section, row):
         """Call when the user confirms deletion of the given row."""
         s = section
-        if self._query:
+        if self.query:
             # The extra section doesn't exist in the data, so we delete it
             # before calling other methods
             s -= 1
