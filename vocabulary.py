@@ -58,7 +58,11 @@ class Vocabulary:
             new_word = False
         self._words[section][word] = notes
         self.save_json_file()
-        row = self.list_words(section).index(word)
+        word_list = self.list_words(section)
+        if word in word_list:  # a word could be filtered out by a query
+            row = word_list.index(word)
+        else:
+            return None
         if self.query:
             section += 1
         if new_word:
