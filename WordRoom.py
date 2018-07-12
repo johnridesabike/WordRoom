@@ -5,6 +5,7 @@ It contains all of the UI views and actions.
 """
 # coding: utf-8
 import os.path
+import builtins
 import json
 import webbrowser
 from urllib.parse import urlparse, unquote
@@ -20,7 +21,7 @@ from config import VOCABULARY_FILE, CONFIG_FILE, HTML_DIR, UI_DIR
 __author__ = 'John Jackson'
 __copyright__ = 'Copyright 2018 John Jackson'
 __license__ = 'MIT'
-__version__ = '1.1'
+__version__ = '1.1.1'
 __maintainer__ = "John Jackson"
 __email__ = "jbpjackson@icloud.com"
 
@@ -32,8 +33,7 @@ __email__ = "jbpjackson@icloud.com"
 
 def load_word_view(word=''):
     """Open a WordView."""
-    layout = container.objc_instance.traitCollection().horizontalSizeClass()
-    if layout == AdaptiveView.REGULAR:
+    if container.horizontal_size_class() == AdaptiveView.REGULAR:
         word_view.load_word(word)
     else:
         compact_word_view.load_word(word)
@@ -207,15 +207,16 @@ class WordView(ui.View):
         lookup_img = ui.Image.named('iob:ios7_search_32')
         lookup_button = ui.ButtonItem(image=lookup_img,
                                       action=self.action_search)
+
         self.right_button_items = [share_button, lookup_button]
-        self.add_subview(ui.load_view(os.path.join(UI_DIR, 'blank')))
+        self.add_subview(load_view('blank'))
         self['blank'].background_color = 'white'
         self['blank'].flex = 'WH'
         self['blank'].frame = self.frame
 
-    def load_word(self, word: str):
+    def load_word(self, word: str, force=False):
         """Open a word."""
-        if self['word'].text == word:
+        if self['word'].text == word and not force:
             return
         self['blank'].hidden = True
         self.right_button_items[0].enabled = True
@@ -229,6 +230,21 @@ class WordView(ui.View):
             self['webcontainer']['html_definition'].load_html(loading)
         self.switch_modes()
         self.load_definition(word)
+        self.select_word()
+
+    def select_word(self):
+        """Select the current word on the table."""
+        if self['textview'].text:
+            section = 0
+        else:
+            section = 1
+        words = vocab.list_words(section)
+        if vocab.query:
+            section += 1
+        if self['word'].text in words:
+            row = words.index(self['word'].text)
+            if lookup_view['table'].selected_rows != [(section, row)]:
+                lookup_view['table'].selected_rows = [(section, row)]
 
     def clear(self):
         """Clear the word data and display a placeholder "blank" view."""
@@ -255,7 +271,7 @@ class WordView(ui.View):
     def action_share(self, sender):
         """Open the iOS share dialog to export a word or its notes."""
         options = ['Share Word', 'Share Word & Notes']
-        d = dialogs.list_dialog(items=options)
+        d = dialogs.list_dialog(items=options, title='Share Word')
         word = self['word'].text
         if d == options[0]:
             text = word
@@ -267,8 +283,7 @@ class WordView(ui.View):
 
     def action_search(self, sender):
         """Open the search box on LookupView."""
-        lo = container.objc_instance.traitCollection().horizontalSizeClass()
-        if lo == AdaptiveView.COMPACT:
+        if container.horizontal_size_class() == AdaptiveView.COMPACT:
             for word in container.open_words:
                 container.nav_column.pop_view()
         lookup_view['search_field'].begin_editing()
@@ -342,6 +357,7 @@ class AdaptiveView(ui.View):
         """Initialize the view with the two view columns."""
         # Putting content_column inside a NavigationView is a hack to make its
         # title bar visible. We never invoke the NavigationView methods.
+        nav_column = ui.NavigationView(nav_column)
         self.add_subview(nav_column)
         self.add_subview(ui.NavigationView(content_column))
         self.content_column = content_column
@@ -355,11 +371,15 @@ class AdaptiveView(ui.View):
 
     def layout(self):
         """Call when the layout changes."""
-        new_layout = self.objc_instance.traitCollection().horizontalSizeClass()
+        new_layout = self.horizontal_size_class()
         if new_layout == self.REGULAR and self.last_layout != self.REGULAR:
             self.set_regular()
         if new_layout == self.COMPACT and self.last_layout != self.COMPACT:
             self.set_compact()
+
+    def horizontal_size_class(self):
+        """Return regular or compact size class."""
+        return self.objc_instance.traitCollection().horizontalSizeClass()
 
     def set_compact(self):
         """Render the view in compact mode.
@@ -393,7 +413,6 @@ class AdaptiveView(ui.View):
             for word in self.open_words:
                 nav.pop_view(False)
                 self.content_column.load_word(word)
-        self.content_column.left_button_items = []
         self.last_layout = self.REGULAR
 
 
@@ -445,7 +464,7 @@ class WebDelegate:
                     # This is one special condition for when define.define()
                     # returns a message asking to change an API key.
                     action_change_key()
-                    wv.load_word(wv['word'].text)
+                    wv.load_word(wv['word'].text, True)
                 else:
                     print('unknown url:', parsed_url)
                     return False
@@ -524,16 +543,33 @@ class SearchDelegate:
             cancel.enabled = False
 
 
+def load_view(view_name: str):
+    """Return a given view from a UI file."""
+    return ui.load_view(os.path.join(UI_DIR, view_name))
+
+
 if __name__ == '__main__':
-    vocab = Vocabulary(data_file=VOCABULARY_FILE)
-    jinja2env = Environment(loader=FileSystemLoader(HTML_DIR))
-    lookup_view = ui.load_view(os.path.join(UI_DIR, 'lookup'))
-    nav_view = ui.NavigationView(lookup_view, flex='WH')
-    word_view = ui.load_view(os.path.join(UI_DIR, 'word'))
-    compact_word_view = ui.load_view(os.path.join(UI_DIR, 'word'))
-    about_view = ui.load_view(os.path.join(UI_DIR, 'about'))
-    container = AdaptiveView(nav_view, word_view)
-    container.name = 'WordRoom'
-    container.present('fullscreen', hide_title_bar=True)
+    # This `builtins` trick fixes a problem where launching the script from
+    # the home screen can cause multiple instances to run at once.
+    # https://forum.omz-software.com/topic/4097/home-screen-alias-is-script-already-running/
+    try:
+        (vocab, jinja2env, lookup_view, word_view,
+         compact_word_view, about_view, container) = builtins.wordroom
+    except (AttributeError, ValueError):
+        container = None
+    if isinstance(container, ui.View) and container.on_screen:
+        pass  # reuse the original globals
+    else:  # initialize new globals
+        vocab = Vocabulary(data_file=VOCABULARY_FILE)
+        jinja2env = Environment(loader=FileSystemLoader(HTML_DIR))
+        lookup_view = load_view('lookup')
+        word_view = load_view('word')
+        compact_word_view = load_view('word')
+        about_view = load_view('about')
+        container = AdaptiveView(lookup_view, word_view)
+        container.name = 'WordRoom'
+        container.present('fullscreen', hide_title_bar=True)
+        builtins.wordroom = (vocab, jinja2env, lookup_view, word_view,
+                             compact_word_view, about_view, container)
     # if appex.is_running_extension():
     #    load_word_view(appex.get_text())
