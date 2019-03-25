@@ -95,7 +95,8 @@ def wordnik(word: str):
                 'attributionUrl': attribution_url,
                 'suggestions': suggestions,
                 'messages': []}
-    except URLError:
+    except URLError as e:
+        print(e)
         data = opted(word)
         data['messages'].append('''WordRoom couldn't connect to WordNik.com to
                                 retrieve online definitions.''')

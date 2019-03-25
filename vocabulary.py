@@ -3,6 +3,7 @@
 
 It's used as a data source for the main table.
 """
+from os.path import getsize
 import json
 import random
 import ui
@@ -22,6 +23,7 @@ class Vocabulary:
         self.query = ''  # used for searching the list
         self.fulltext_toggle = False
         self.data_file = data_file
+        self.data_id = None  # Identifies sync conflicts
         self.load_json_file()
 
     def load_json_file(self, filename=''):
@@ -31,14 +33,34 @@ class Vocabulary:
         try:
             with open(filename, 'r') as infile:
                 self._words = json.load(infile)
+            self.data_id = getsize(filename)
         except FileNotFoundError:
             with open('default-' + filename, 'r') as infile:
                 self._words = json.load(infile)
 
-    def save_json_file(self, indent=None):
+    def save_json_file(self, indent=1):
         """Save vocabulary data to the JSON file."""
         with open(self.data_file, 'w') as outfile:
             json.dump(self._words, outfile, indent=indent)
+        self.data_id = getsize(self.data_file)
+
+    def verify_data(self):
+        """Merge new data.
+        
+        This compares the current data file to the original. If they don't
+        match, assumes that it's because new iCloud data synced from another
+        device. It replaces the old data with fresh data.
+        
+        TODO: this method is very crude and will not account for all types of
+        sync conflicts. It should probably be revisited.
+        """
+        if self.data_id != getsize(self.data_file):
+            print('data not in sync! merging data...')
+            with open(self.data_file, 'r') as infile:
+                self._words = json.load(infile)
+            self.data_id = getsize(self.data_file)
+                #self._words = [{**self._words[0], **new_words[0]},
+                #               {**self._words[1], **new_words[1]}]
 
     def set_word(self, word: str, notes=''):
         """Add a word or updates the word if it already exists.
@@ -56,6 +78,7 @@ class Vocabulary:
             section = 1
         if word in self._words[section]:
             new_word = False
+        self.verify_data()
         self._words[section][word] = notes
         self.save_json_file()
         word_list = self.list_words(section)
